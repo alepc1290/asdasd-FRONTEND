@@ -1,0 +1,82 @@
+/* ── Variables ── */
+:root {
+  --bs-body-font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --green-main: #198754;
+}
+
+/* ── Body ── */
+body {
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+/* ── Navbar ── */
+.navbar-brand {
+  font-size: 1.2rem;
+  letter-spacing: -0.3px;
+}
+
+/* ── Cards ── */
+.card {
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10) !important;
+}
+
+/* ── Formularios ── */
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--green-main);
+  box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.2);
+}
+
+/* ── Botones ── */
+.btn-success {
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+/* ── Tablas ── */
+.table th {
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── Badge ── */
+.badge {
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+/* ── Alertas ── */
+.alert-success {
+  background-color: #d1e7dd;
+  border-color: #a3cfbb;
+  color: #0a3622;
+}
+
+/* ── Responsive ── */
+@media (max-width: 576px) {
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.4rem; }
+  .display-4 { font-size: 2rem; }
+  .btn-lg { font-size: 1rem; }
+}
+
+/* ── Spinner de página ── */
+.page-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #aaa; }

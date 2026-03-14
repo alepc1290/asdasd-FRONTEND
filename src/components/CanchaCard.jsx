@@ -1,6 +1,6 @@
 import { Link } from 'react-router'
 
-const TIPO_LABEL = { futbol5: 'Fútbol 5', futbol7: 'Fútbol 7' }
+const TIPO_LABEL = { futbol5: 'Fútbol 5', futbol7: 'Fútbol 7', futbol7: 'Fútbol 11' }
 const ESTADO_COLOR = { disponible: 'success', mantenimiento: 'warning', inactiva: 'danger' }
 
 function CanchaCard({ cancha, showReservar = true }) {

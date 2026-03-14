@@ -6,41 +6,41 @@ import {
   getUsers, deleteUser,
 } from '../services/api'
 
-const CANCHA_VACIA  = { nombre: '', tipo: 'futbol5', precio: '', descripcion: '', imagen: '', estado: 'disponible' }
+const CANCHA_VACIA = { nombre: '', tipo: 'futbol5', precio: '', descripcion: '', imagen: '', estado: 'disponible' }
 const PRODUCTO_VACIO = { nombre: '', precio: '', stock: '', descripcion: '', imagen: '' }
 
 function AdminPanel() {
   const [tab, setTab] = useState('canchas')
 
   // ── CANCHAS ──
-  const [canchas, setCanchas]           = useState([])
-  const [loadingC, setLoadingC]         = useState(true)
-  const [formCancha, setFormCancha]     = useState(CANCHA_VACIA)
-  const [editandoC, setEditandoC]       = useState(null)
-  const [submittingC, setSubmittingC]   = useState(false)
+  const [canchas, setCanchas] = useState([])
+  const [loadingC, setLoadingC] = useState(true)
+  const [formCancha, setFormCancha] = useState(CANCHA_VACIA)
+  const [editandoC, setEditandoC] = useState(null)
+  const [submittingC, setSubmittingC] = useState(false)
 
   // ── PRODUCTOS ──
-  const [productos, setProductos]         = useState([])
-  const [loadingP, setLoadingP]           = useState(true)
-  const [formProducto, setFormProducto]   = useState(PRODUCTO_VACIO)
-  const [editandoP, setEditandoP]         = useState(null)
-  const [submittingP, setSubmittingP]     = useState(false)
+  const [productos, setProductos] = useState([])
+  const [loadingP, setLoadingP] = useState(true)
+  const [formProducto, setFormProducto] = useState(PRODUCTO_VACIO)
+  const [editandoP, setEditandoP] = useState(null)
+  const [submittingP, setSubmittingP] = useState(false)
 
   // ── USUARIOS ──
-  const [usuarios, setUsuarios]   = useState([])
-  const [loadingU, setLoadingU]   = useState(true)
+  const [usuarios, setUsuarios] = useState([])
+  const [loadingU, setLoadingU] = useState(true)
 
   useEffect(() => { fetchCanchas(); fetchProductos(); fetchUsuarios() }, [])
 
-  const fetchCanchas  = () => { setLoadingC(true);  getCanchas().then(r => setCanchas(r.data.data)).catch(console.error).finally(() => setLoadingC(false)) }
+  const fetchCanchas = () => { setLoadingC(true); getCanchas().then(r => setCanchas(r.data.data)).catch(console.error).finally(() => setLoadingC(false)) }
   const fetchProductos = () => { setLoadingP(true); getProductos().then(r => setProductos(r.data.data)).catch(console.error).finally(() => setLoadingP(false)) }
-  const fetchUsuarios  = () => { setLoadingU(true); getUsers().then(r => setUsuarios(r.data.data)).catch(console.error).finally(() => setLoadingU(false)) }
+  const fetchUsuarios = () => { setLoadingU(true); getUsers().then(r => setUsuarios(r.data.data)).catch(console.error).finally(() => setLoadingU(false)) }
 
   // ────────────────── CANCHAS ──────────────────
   const handleChangeC = (e) => setFormCancha({ ...formCancha, [e.target.name]: e.target.value })
 
   const handleEditCancha = (c) => { setEditandoC(c._id); setFormCancha({ nombre: c.nombre, tipo: c.tipo, precio: c.precio, descripcion: c.descripcion || '', imagen: c.imagen || '', estado: c.estado }) }
-  const cancelarEditC    = () => { setEditandoC(null); setFormCancha(CANCHA_VACIA) }
+  const cancelarEditC = () => { setEditandoC(null); setFormCancha(CANCHA_VACIA) }
 
   const handleSubmitCancha = async (e) => {
     e.preventDefault()
@@ -73,7 +73,7 @@ function AdminPanel() {
   const handleChangeP = (e) => setFormProducto({ ...formProducto, [e.target.name]: e.target.value })
 
   const handleEditProducto = (p) => { setEditandoP(p._id); setFormProducto({ nombre: p.nombre, precio: p.precio, stock: p.stock, descripcion: p.descripcion || '', imagen: p.imagen || '' }) }
-  const cancelarEditP      = () => { setEditandoP(null); setFormProducto(PRODUCTO_VACIO) }
+  const cancelarEditP = () => { setEditandoP(null); setFormProducto(PRODUCTO_VACIO) }
 
   const handleSubmitProducto = async (e) => {
     e.preventDefault()
@@ -124,9 +124,9 @@ function AdminPanel() {
         {/* Stats rápidas */}
         <div className="row g-3 mb-4">
           {[
-            { label: 'Canchas', val: canchas.length,  icon: 'bi-dribbble',    color: 'success' },
-            { label: 'Productos', val: productos.length, icon: 'bi-box-seam',  color: 'primary' },
-            { label: 'Usuarios', val: usuarios.length,  icon: 'bi-people',    color: 'warning' },
+            { label: 'Canchas', val: canchas.length, icon: 'bi-dribbble', color: 'success' },
+            { label: 'Productos', val: productos.length, icon: 'bi-box-seam', color: 'primary' },
+            { label: 'Usuarios', val: usuarios.length, icon: 'bi-people', color: 'warning' },
           ].map((s) => (
             <div className="col-4" key={s.label}>
               <div className={`card border-0 shadow-sm text-center py-3`}>
@@ -146,9 +146,9 @@ function AdminPanel() {
                 className={`nav-link text-capitalize fw-semibold ${tab === t ? 'active' : ''}`}
                 onClick={() => setTab(t)}
               >
-                {t === 'canchas'   && <i className="bi bi-dribbble me-2"></i>}
+                {t === 'canchas' && <i className="bi bi-dribbble me-2"></i>}
                 {t === 'productos' && <i className="bi bi-box-seam me-2"></i>}
-                {t === 'usuarios'  && <i className="bi bi-people me-2"></i>}
+                {t === 'usuarios' && <i className="bi bi-people me-2"></i>}
                 {t}
               </button>
             </li>
@@ -173,8 +173,11 @@ function AdminPanel() {
                     <div className="mb-3">
                       <label className="form-label small fw-semibold">Tipo</label>
                       <select name="tipo" className="form-select" value={formCancha.tipo} onChange={handleChangeC}>
+                        <option value="futbol5" disabled>Seleccionar</option>
+                        <option value="futbol5">Fútbol sala</option>
                         <option value="futbol5">Fútbol 5</option>
                         <option value="futbol7">Fútbol 7</option>
+                        <option value="futbol7">Fútbol 11</option>
                       </select>
                     </div>
                     <div className="mb-3">

@@ -4,43 +4,69 @@ import {
   getCanchas, createCancha, updateCancha, deleteCancha,
   getProductos, createProducto, updateProducto, deleteProducto,
   getUsers, deleteUser,
+  getReservasAdmin,
+  confirmarPago,
+  cancelarPago,
 } from '../services/api'
+import { EstadoPagoBadge } from '../components/InstruccionesPago'
 
-const CANCHA_VACIA = { nombre: '', tipo: 'futbol5', precio: '', descripcion: '', imagen: '', estado: 'disponible' }
+const CANCHA_VACIA  = { nombre: '', tipo: 'futbol5', precio: '', descripcion: '', imagen: '', estado: 'disponible' }
 const PRODUCTO_VACIO = { nombre: '', precio: '', stock: '', descripcion: '', imagen: '' }
 
 function AdminPanel() {
   const [tab, setTab] = useState('canchas')
 
   // ── CANCHAS ──
-  const [canchas, setCanchas] = useState([])
-  const [loadingC, setLoadingC] = useState(true)
-  const [formCancha, setFormCancha] = useState(CANCHA_VACIA)
-  const [editandoC, setEditandoC] = useState(null)
-  const [submittingC, setSubmittingC] = useState(false)
+  const [canchas, setCanchas]           = useState([])
+  const [loadingC, setLoadingC]         = useState(true)
+  const [formCancha, setFormCancha]     = useState(CANCHA_VACIA)
+  const [editandoC, setEditandoC]       = useState(null)
+  const [submittingC, setSubmittingC]   = useState(false)
 
   // ── PRODUCTOS ──
-  const [productos, setProductos] = useState([])
-  const [loadingP, setLoadingP] = useState(true)
-  const [formProducto, setFormProducto] = useState(PRODUCTO_VACIO)
-  const [editandoP, setEditandoP] = useState(null)
-  const [submittingP, setSubmittingP] = useState(false)
+  const [productos, setProductos]         = useState([])
+  const [loadingP, setLoadingP]           = useState(true)
+  const [formProducto, setFormProducto]   = useState(PRODUCTO_VACIO)
+  const [editandoP, setEditandoP]         = useState(null)
+  const [submittingP, setSubmittingP]     = useState(false)
 
   // ── USUARIOS ──
-  const [usuarios, setUsuarios] = useState([])
-  const [loadingU, setLoadingU] = useState(true)
+  const [usuarios, setUsuarios]   = useState([])
+  const [loadingU, setLoadingU]   = useState(true)
 
-  useEffect(() => { fetchCanchas(); fetchProductos(); fetchUsuarios() }, [])
+  // ── RESERVAS ADMIN ──
+  const [reservasAdmin, setReservasAdmin] = useState([])
+  const [loadingR, setLoadingR]           = useState(true)
 
-  const fetchCanchas = () => { setLoadingC(true); getCanchas().then(r => setCanchas(r.data.data)).catch(console.error).finally(() => setLoadingC(false)) }
-  const fetchProductos = () => { setLoadingP(true); getProductos().then(r => setProductos(r.data.data)).catch(console.error).finally(() => setLoadingP(false)) }
-  const fetchUsuarios = () => { setLoadingU(true); getUsers().then(r => setUsuarios(r.data.data)).catch(console.error).finally(() => setLoadingU(false)) }
+  useEffect(() => { fetchCanchas(); fetchProductos(); fetchUsuarios(); fetchReservasAdmin() }, [])
+
+  const fetchCanchas       = () => { setLoadingC(true);  getCanchas().then(r => setCanchas(r.data.data)).catch(console.error).finally(() => setLoadingC(false)) }
+  const fetchProductos     = () => { setLoadingP(true); getProductos().then(r => setProductos(r.data.data)).catch(console.error).finally(() => setLoadingP(false)) }
+  const fetchUsuarios      = () => { setLoadingU(true); getUsers().then(r => setUsuarios(r.data.data)).catch(console.error).finally(() => setLoadingU(false)) }
+  const fetchReservasAdmin = () => { setLoadingR(true); getReservasAdmin().then(r => setReservasAdmin(r.data.reservas)).catch(console.error).finally(() => setLoadingR(false)) }
+
+  const handleConfirmarPago = async (id) => {
+    try {
+      await confirmarPago(id)
+      toast.success('Pago confirmado')
+      fetchReservasAdmin()
+    } catch (err) { toast.error(err.response?.data?.message || 'Error') }
+  }
+
+  const handleCancelarPago = async (id) => {
+    if (!confirm('¿Cancelar este pago?')) return
+    try {
+      await cancelarPago(id)
+      toast.success('Pago cancelado')
+      fetchReservasAdmin()
+    } catch (err) { toast.error(err.response?.data?.message || 'Error') }
+  }
 
   // ────────────────── CANCHAS ──────────────────
   const handleChangeC = (e) => setFormCancha({ ...formCancha, [e.target.name]: e.target.value })
 
   const handleEditCancha = (c) => { setEditandoC(c._id); setFormCancha({ nombre: c.nombre, tipo: c.tipo, precio: c.precio, descripcion: c.descripcion || '', imagen: c.imagen || '', estado: c.estado }) }
-  const cancelarEditC = () => { setEditandoC(null); setFormCancha(CANCHA_VACIA) }
+  const cancelarEditC    = () => { setEditandoC(null); setFormCancha(CANCHA_VACIA) }
 
   const handleSubmitCancha = async (e) => {
     e.preventDefault()
@@ -73,7 +99,7 @@ function AdminPanel() {
   const handleChangeP = (e) => setFormProducto({ ...formProducto, [e.target.name]: e.target.value })
 
   const handleEditProducto = (p) => { setEditandoP(p._id); setFormProducto({ nombre: p.nombre, precio: p.precio, stock: p.stock, descripcion: p.descripcion || '', imagen: p.imagen || '' }) }
-  const cancelarEditP = () => { setEditandoP(null); setFormProducto(PRODUCTO_VACIO) }
+  const cancelarEditP      = () => { setEditandoP(null); setFormProducto(PRODUCTO_VACIO) }
 
   const handleSubmitProducto = async (e) => {
     e.preventDefault()
@@ -124,11 +150,12 @@ function AdminPanel() {
         {/* Stats rápidas */}
         <div className="row g-3 mb-4">
           {[
-            { label: 'Canchas', val: canchas.length, icon: 'bi-dribbble', color: 'success' },
-            { label: 'Productos', val: productos.length, icon: 'bi-box-seam', color: 'primary' },
-            { label: 'Usuarios', val: usuarios.length, icon: 'bi-people', color: 'warning' },
+            { label: 'Canchas',   val: canchas.length,       icon: 'bi-dribbble',          color: 'success' },
+            { label: 'Productos', val: productos.length,     icon: 'bi-box-seam',          color: 'primary' },
+            { label: 'Usuarios',  val: usuarios.length,      icon: 'bi-people',            color: 'warning' },
+            { label: 'Reservas',  val: reservasAdmin.length, icon: 'bi-calendar-check',    color: 'info' },
           ].map((s) => (
-            <div className="col-4" key={s.label}>
+            <div className="col-6 col-sm-3" key={s.label}>
               <div className={`card border-0 shadow-sm text-center py-3`}>
                 <i className={`bi ${s.icon} text-${s.color} mb-1`} style={{ fontSize: 28 }}></i>
                 <h3 className="fw-bold mb-0">{s.val}</h3>
@@ -140,15 +167,16 @@ function AdminPanel() {
 
         {/* Tabs */}
         <ul className="nav nav-tabs mb-4">
-          {['canchas', 'productos', 'usuarios'].map((t) => (
+          {['canchas', 'productos', 'usuarios', 'reservas'].map((t) => (
             <li className="nav-item" key={t}>
               <button
                 className={`nav-link text-capitalize fw-semibold ${tab === t ? 'active' : ''}`}
                 onClick={() => setTab(t)}
               >
-                {t === 'canchas' && <i className="bi bi-dribbble me-2"></i>}
+                {t === 'canchas'   && <i className="bi bi-dribbble me-2"></i>}
                 {t === 'productos' && <i className="bi bi-box-seam me-2"></i>}
-                {t === 'usuarios' && <i className="bi bi-people me-2"></i>}
+                {t === 'usuarios'  && <i className="bi bi-people me-2"></i>}
+                {t === 'reservas'  && <i className="bi bi-calendar-check me-2"></i>}
                 {t}
               </button>
             </li>
@@ -173,11 +201,8 @@ function AdminPanel() {
                     <div className="mb-3">
                       <label className="form-label small fw-semibold">Tipo</label>
                       <select name="tipo" className="form-select" value={formCancha.tipo} onChange={handleChangeC}>
-                        <option value="futbol5" disabled>Seleccionar</option>
-                        <option value="futbol5">Fútbol sala</option>
                         <option value="futbol5">Fútbol 5</option>
                         <option value="futbol7">Fútbol 7</option>
-                        <option value="futbol7">Fútbol 11</option>
                       </select>
                     </div>
                     <div className="mb-3">
@@ -395,6 +420,156 @@ function AdminPanel() {
             )}
           </div>
         )}
+        {/* ─── TAB RESERVAS ─── */}
+        {tab === 'reservas' && (
+          <div>
+            {/* Header + leyenda */}
+            <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+              <h6 className="fw-bold mb-0">
+                <i className="bi bi-calendar-check me-2 text-info"></i>
+                Todas las reservas ({reservasAdmin.length})
+              </h6>
+              <div className="d-flex align-items-center gap-3 flex-wrap">
+                <div className="d-flex gap-2 flex-wrap">
+                  {[
+                    { estado: 'pendiente',    color: 'warning', text: 'dark',  label: 'Pendiente' },
+                    { estado: 'pago_enviado', color: 'info',    text: 'dark',  label: 'Comp. enviado' },
+                    { estado: 'confirmado',   color: 'success', text: 'white', label: 'Confirmado' },
+                    { estado: 'cancelado',    color: 'danger',  text: 'white', label: 'Cancelado' },
+                  ].map(({ color, text, label }) => (
+                    <span key={label} className={`badge bg-${color} text-${text} small`}>{label}</span>
+                  ))}
+                </div>
+                <button className="btn btn-outline-secondary btn-sm" onClick={fetchReservasAdmin}>
+                  <i className="bi bi-arrow-clockwise me-1"></i>Actualizar
+                </button>
+              </div>
+            </div>
+
+            {loadingR ? (
+              <div className="text-center py-5"><div className="spinner-border text-info"></div></div>
+            ) : reservasAdmin.length === 0 ? (
+              <div className="text-center py-5 text-muted">
+                <i className="bi bi-calendar-x" style={{ fontSize: 48 }}></i>
+                <p className="mt-2">No hay reservas todavía</p>
+              </div>
+            ) : (
+              <div className="table-responsive">
+                <table className="table table-hover align-middle">
+                  <thead className="table-dark">
+                    <tr>
+                      <th>Usuario</th>
+                      <th>Cancha</th>
+                      <th>Fecha</th>
+                      <th>Horario</th>
+                      <th>Estado pago</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {reservasAdmin.map((r) => {
+                      const PAGO = {
+                        pendiente:    { color: 'warning', text: 'dark',  icon: 'bi-hourglass-split', label: 'Pendiente' },
+                        pago_enviado: { color: 'info',    text: 'dark',  icon: 'bi-send-check',      label: 'Comp. enviado' },
+                        confirmado:   { color: 'success', text: 'white', icon: 'bi-check-circle',    label: 'Confirmado' },
+                        cancelado:    { color: 'danger',  text: 'white', icon: 'bi-x-circle',        label: 'Cancelado' },
+                      }
+                      const estadoPago = r.estadoPago || 'pendiente'
+                      const cfg = PAGO[estadoPago] || PAGO.pendiente
+                      const horas = parseInt(r.horaFin) - parseInt(r.horaInicio)
+                      const total = r.precio * horas
+
+                      return (
+                        <tr key={r._id}>
+                          <td>
+                            <div className="fw-semibold">{r.usuario}</div>
+                            <div className="text-muted small">{r.email}</div>
+                          </td>
+                          <td>
+                            <div className="fw-semibold">{r.cancha}</div>
+                            <div className="text-muted small">
+                              <span className="badge bg-success me-1">
+                                {r.tipoCacha === 'futbol5' ? 'F5' : 'F7'}
+                              </span>
+                              ${r.precio?.toLocaleString()}/h
+                            </div>
+                          </td>
+                          <td className="small">
+                            {new Date(r.fecha + 'T12:00:00').toLocaleDateString('es-AR', {
+                              weekday: 'short', day: 'numeric', month: 'short'
+                            })}
+                          </td>
+                          <td>
+                            <span className="badge bg-primary text-white d-block mb-1">
+                              {r.horaInicio} – {r.horaFin} hs
+                            </span>
+                            <span className="text-muted small">
+                              {horas}h · <strong>${total?.toLocaleString()}</strong>
+                            </span>
+                          </td>
+                          <td>
+                            <span className={`badge bg-${cfg.color} text-${cfg.text} d-inline-flex align-items-center gap-1`}>
+                              <i className={`bi ${cfg.icon}`}></i>
+                              {cfg.label}
+                            </span>
+                          </td>
+                          <td>
+                            <div className="d-flex flex-column gap-1">
+                              {estadoPago !== 'confirmado' && estadoPago !== 'cancelado' && (
+                                <button
+                                  className="btn btn-success btn-sm"
+                                  onClick={async () => {
+                                    try {
+                                      await confirmarPago(r._id)
+                                      toast.success(`Pago de ${r.usuario} confirmado`)
+                                      fetchReservasAdmin()
+                                    } catch (err) {
+                                      toast.error(err.response?.data?.message || 'Error al confirmar')
+                                    }
+                                  }}
+                                >
+                                  <i className="bi bi-check-lg me-1"></i>Confirmar pago
+                                </button>
+                              )}
+                              {estadoPago !== 'cancelado' && (
+                                <button
+                                  className="btn btn-outline-danger btn-sm"
+                                  onClick={async () => {
+                                    if (!confirm(`¿Cancelar reserva de ${r.usuario}?`)) return
+                                    try {
+                                      await cancelarPago(r._id)
+                                      toast.success('Reserva cancelada')
+                                      fetchReservasAdmin()
+                                    } catch (err) {
+                                      toast.error(err.response?.data?.message || 'Error al cancelar')
+                                    }
+                                  }}
+                                >
+                                  <i className="bi bi-x-lg me-1"></i>Cancelar
+                                </button>
+                              )}
+                              {estadoPago === 'confirmado' && (
+                                <span className="text-success small">
+                                  <i className="bi bi-check-circle-fill me-1"></i>Pagado
+                                </span>
+                              )}
+                              {estadoPago === 'cancelado' && (
+                                <span className="text-danger small">
+                                  <i className="bi bi-x-circle-fill me-1"></i>Cancelado
+                                </span>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+
       </div>
     </div>
   )

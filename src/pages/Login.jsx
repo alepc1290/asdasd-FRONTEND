@@ -1,36 +1,66 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router'
+import { Link, useNavigate, useLocation } from 'react-router'
 import { toast } from 'sonner'
 import { loginUser } from '../services/api'
 import { useAuth } from '../context/AuthContext'
 
+// Mensajes del backend que indican email no verificado
+const MSG_NO_VERIFICADO = [
+  'debes verificar tu correo',
+  'verifica tu correo',
+  'email no verificado',
+  'correo no verificado',
+  'verify your email',
+]
+
+const esErrorDeVerificacion = (msg) =>
+  MSG_NO_VERIFICADO.some((k) => msg.toLowerCase().includes(k))
+
 function Login() {
   const { login, isLogged } = useAuth()
-  const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
-  const [form, setForm] = useState({ email: '', password: '' })
-  const [error, setError] = useState('')
+  const navigate  = useNavigate()
+  const location  = useLocation()
 
-  // Si ya está logueado, redirigir
+  const [loading, setLoading]           = useState(false)
+  const [form, setForm]                 = useState({ email: '', password: '' })
+  const [error, setError]               = useState('')
+  const [noVerificado, setNoVerificado] = useState(false)
+
   useEffect(() => {
     if (isLogged) navigate('/reservas', { replace: true })
   }, [isLogged])
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
+  // Si viene de /verify-email con éxito, mostrar toast
+  useEffect(() => {
+    if (location.state?.verificado) {
+      toast.success('¡Email verificado! Ya podés iniciar sesión.')
+    }
+  }, [])
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value })
+    // limpiar aviso de no verificado si cambia el email
+    if (e.target.name === 'email') setNoVerificado(false)
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
+    setNoVerificado(false)
     setLoading(true)
     try {
       const res = await loginUser(form)
-      login(res.data.data)           // guarda token + user en context y localStorage
+      login(res.data.data)
       toast.success('¡Bienvenido/a!')
       navigate('/reservas', { replace: true })
     } catch (err) {
       const msg = err.response?.data?.message || 'Error al iniciar sesión'
-      setError(msg)
-      toast.error(msg)
+      if (esErrorDeVerificacion(msg)) {
+        setNoVerificado(true)   // muestra el banner específico
+      } else {
+        setError(msg)
+        toast.error(msg)
+      }
     } finally {
       setLoading(false)
     }
@@ -46,9 +76,30 @@ function Login() {
             <p className="text-muted small">Ingresá tu cuenta para reservar canchas</p>
           </div>
 
+          {/* Error genérico */}
           {error && (
             <div className="alert alert-danger py-2 small" role="alert">
               <i className="bi bi-exclamation-circle me-2"></i>{error}
+            </div>
+          )}
+
+          {/* Banner específico: email no verificado */}
+          {noVerificado && (
+            <div className="alert alert-warning border-0 small" role="alert">
+              <div className="d-flex gap-2 align-items-start">
+                <i className="bi bi-envelope-exclamation-fill fs-5 flex-shrink-0 mt-1"></i>
+                <div>
+                  <p className="fw-semibold mb-1">Verificá tu correo electrónico</p>
+                  <p className="mb-0">
+                    Debés verificar tu cuenta antes de iniciar sesión.
+                    Revisá tu bandeja de entrada y hacé clic en el enlace que te enviamos
+                    {form.email && <> a <strong>{form.email}</strong></>}.
+                  </p>
+                  <p className="mb-0 mt-1 text-muted">
+                    ¿No llegó el correo? Revisá la carpeta de spam.
+                  </p>
+                </div>
+              </div>
             </div>
           )}
 
@@ -58,7 +109,7 @@ function Login() {
               <input
                 type="email"
                 name="email"
-                className="form-control form-control-lg"
+                className={`form-control form-control-lg ${noVerificado ? 'border-warning' : ''}`}
                 placeholder="ejemplo@email.com"
                 value={form.email}
                 onChange={handleChange}

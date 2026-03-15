@@ -7,9 +7,11 @@ import { useAuth } from '../context/AuthContext'
 function Register() {
   const { isLogged } = useAuth()
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
-  const [error, setError]     = useState('')
-  const [form, setForm]       = useState({ nombre: '', email: '', password: '', confirmar: '' })
+  const [loading, setLoading]   = useState(false)
+  const [error, setError]       = useState('')
+  const [enviado, setEnviado]   = useState(false)  // muestra pantalla de éxito
+  const [emailUsado, setEmailUsado] = useState('')
+  const [form, setForm]         = useState({ nombre: '', email: '', password: '', confirmar: '' })
 
   useEffect(() => {
     if (isLogged) navigate('/', { replace: true })
@@ -31,8 +33,8 @@ function Register() {
     setLoading(true)
     try {
       await registerUser({ nombre: form.nombre, email: form.email, password: form.password })
-      toast.success('¡Cuenta creada! Ahora podés iniciar sesión.')
-      navigate('/login')
+      setEmailUsado(form.email)
+      setEnviado(true)   // cambia a pantalla de verificación pendiente
     } catch (err) {
       const msg = err.response?.data?.message || 'Error al registrarse'
       setError(msg)
@@ -42,6 +44,54 @@ function Register() {
     }
   }
 
+  // ── Pantalla post-registro ──────────────────────────────────────────────────
+  if (enviado) {
+    return (
+      <div className="min-vh-100 d-flex align-items-center justify-content-center bg-light py-5">
+        <div className="card shadow border-0 w-100 text-center" style={{ maxWidth: 460 }}>
+          <div className="card-body p-4 p-md-5">
+            <div className="mb-4">
+              <span className="d-inline-flex align-items-center justify-content-center bg-success bg-opacity-10 rounded-circle mb-3"
+                style={{ width: 80, height: 80 }}>
+                <i className="bi bi-envelope-check text-success" style={{ fontSize: 40 }}></i>
+              </span>
+              <h3 className="fw-bold">Revisá tu correo</h3>
+              <p className="text-muted mb-0">
+                Te enviamos un email de verificación a:
+              </p>
+              <p className="fw-semibold text-success mt-1 mb-3">{emailUsado}</p>
+              <p className="text-muted small">
+                Hacé clic en el enlace del correo para activar tu cuenta.
+                Si no lo ves, revisá la carpeta de spam.
+              </p>
+            </div>
+
+            <div className="alert alert-light border small text-start mb-4">
+              <i className="bi bi-info-circle text-success me-2"></i>
+              Una vez verificado tu correo, podrás iniciar sesión y reservar canchas.
+            </div>
+
+            <Link to="/login" className="btn btn-success w-100 btn-lg fw-bold">
+              <i className="bi bi-box-arrow-in-right me-2"></i>
+              Ir a iniciar sesión
+            </Link>
+
+            <p className="text-muted small mt-3 mb-0">
+              ¿Cuenta equivocada?{' '}
+              <button
+                className="btn btn-link btn-sm p-0 text-success"
+                onClick={() => { setEnviado(false); setForm({ nombre: '', email: '', password: '', confirmar: '' }) }}
+              >
+                Volver al registro
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Formulario de registro ──────────────────────────────────────────────────
   return (
     <div className="min-vh-100 d-flex align-items-center justify-content-center bg-light py-5">
       <div className="card shadow border-0 w-100" style={{ maxWidth: 440 }}>

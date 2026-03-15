@@ -10,7 +10,8 @@ import Login     from './pages/Login'
 import Register  from './pages/Register'
 import Reservas  from './pages/Reservas'
 import Productos from './pages/Productos'
-import AdminPanel from './pages/AdminPanel'
+import AdminPanel  from './pages/AdminPanel'
+import VerifyEmail from './pages/VerifyEmail'
 
 function App() {
   return (
@@ -24,7 +25,8 @@ function App() {
               <Route path="/"          element={<Home />} />
               <Route path="/login"     element={<Login />} />
               <Route path="/register"  element={<Register />} />
-              <Route path="/productos" element={<Productos />} />
+              <Route path="/productos"     element={<Productos />} />
+              <Route path="/verify-email"  element={<VerifyEmail />} />
 
               {/* Requieren login */}
               <Route element={<PrivateRoute />}>

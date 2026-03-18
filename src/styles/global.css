@@ -1,20 +1,31 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
-
 @layer base {
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  * {
+    box-sizing: border-box;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-carbon-900 text-white font-body antialiased;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
   }
-  ::selection { @apply bg-verde-500 text-carbon-900; }
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { @apply bg-carbon-800; }
-  ::-webkit-scrollbar-thumb { @apply bg-verde-600 rounded-full; }
+  ::selection {
+    @apply bg-verde-500 text-carbon-900;
+  }
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-carbon-800;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-verde-600 rounded-full;
+  }
 }
 
 @layer components {
@@ -55,15 +66,31 @@
     @apply inline-block bg-carbon-700 text-verde-400 font-mono text-xs px-2 py-1
            border border-carbon-500 uppercase tracking-wider;
   }
-  .badge-success { @apply inline-flex items-center gap-1 bg-verde-500/20 text-verde-400 border border-verde-700 font-mono text-xs px-2 py-0.5 uppercase tracking-wider; }
-  .badge-warning { @apply inline-flex items-center gap-1 bg-yellow-500/20 text-yellow-400 border border-yellow-800 font-mono text-xs px-2 py-0.5 uppercase tracking-wider; }
-  .badge-danger  { @apply inline-flex items-center gap-1 bg-red-500/20 text-red-400 border border-red-800 font-mono text-xs px-2 py-0.5 uppercase tracking-wider; }
-  .badge-default { @apply inline-flex items-center gap-1 bg-carbon-700 text-carbon-300 border border-carbon-500 font-mono text-xs px-2 py-0.5 uppercase tracking-wider; }
+  .badge-success {
+    @apply inline-flex items-center gap-1 bg-verde-500/20 text-verde-400 border border-verde-700 font-mono text-xs px-2 py-0.5 uppercase tracking-wider;
+  }
+  .badge-warning {
+    @apply inline-flex items-center gap-1 bg-yellow-500/20 text-yellow-400 border border-yellow-800 font-mono text-xs px-2 py-0.5 uppercase tracking-wider;
+  }
+  .badge-danger {
+    @apply inline-flex items-center gap-1 bg-red-500/20 text-red-400 border border-red-800 font-mono text-xs px-2 py-0.5 uppercase tracking-wider;
+  }
+  .badge-default {
+    @apply inline-flex items-center gap-1 bg-carbon-700 text-carbon-300 border border-carbon-500 font-mono text-xs px-2 py-0.5 uppercase tracking-wider;
+  }
 }
 
 @layer utilities {
-  .animate-delay-100 { animation-delay: 100ms; }
-  .animate-delay-200 { animation-delay: 200ms; }
-  .animate-delay-300 { animation-delay: 300ms; }
-  .animate-delay-400 { animation-delay: 400ms; }
+  .animate-delay-100 {
+    animation-delay: 100ms;
+  }
+  .animate-delay-200 {
+    animation-delay: 200ms;
+  }
+  .animate-delay-300 {
+    animation-delay: 300ms;
+  }
+  .animate-delay-400 {
+    animation-delay: 400ms;
+  }
 }

@@ -1,82 +1,69 @@
-/* ── Variables ── */
-:root {
-  --bs-body-font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  --green-main: #198754;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@layer base {
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    @apply bg-carbon-900 text-white font-body antialiased;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  }
+  ::selection { @apply bg-verde-500 text-carbon-900; }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { @apply bg-carbon-800; }
+  ::-webkit-scrollbar-thumb { @apply bg-verde-600 rounded-full; }
 }
 
-/* ── Body ── */
-body {
-  background-color: #f8f9fa;
-  color: #212529;
+@layer components {
+  .btn-primary {
+    @apply bg-verde-500 hover:bg-verde-400 text-carbon-900 font-display font-bold uppercase tracking-widest
+           px-6 py-3 text-sm transition-all duration-200
+           hover:shadow-[0_0_24px_rgba(34,197,94,0.4)] active:scale-95 cursor-pointer;
+  }
+  .btn-outline {
+    @apply border border-verde-500 text-verde-400 hover:bg-verde-500 hover:text-carbon-900
+           font-display font-bold uppercase tracking-widest px-6 py-3 text-sm
+           transition-all duration-200 active:scale-95 cursor-pointer;
+  }
+  .btn-ghost {
+    @apply text-carbon-300 hover:text-white font-body text-sm transition-colors duration-200 cursor-pointer;
+  }
+  .btn-danger {
+    @apply border border-red-700 text-red-400 hover:bg-red-700 hover:text-white
+           font-display font-bold uppercase tracking-widest px-4 py-2 text-xs
+           transition-all duration-200 cursor-pointer;
+  }
+  .card {
+    @apply bg-carbon-800 border border-carbon-600 hover:border-verde-600
+           transition-all duration-300 overflow-hidden;
+  }
+  .section-label {
+    @apply font-mono text-verde-500 text-xs uppercase tracking-[0.3em];
+  }
+  .section-title {
+    @apply font-display font-black text-white uppercase leading-none;
+  }
+  .input-field {
+    @apply w-full bg-carbon-700 border border-carbon-500 focus:border-verde-500
+           text-white placeholder-carbon-300 px-4 py-3 text-sm font-body
+           outline-none transition-colors duration-200;
+  }
+  .tag {
+    @apply inline-block bg-carbon-700 text-verde-400 font-mono text-xs px-2 py-1
+           border border-carbon-500 uppercase tracking-wider;
+  }
+  .badge-success { @apply inline-flex items-center gap-1 bg-verde-500/20 text-verde-400 border border-verde-700 font-mono text-xs px-2 py-0.5 uppercase tracking-wider; }
+  .badge-warning { @apply inline-flex items-center gap-1 bg-yellow-500/20 text-yellow-400 border border-yellow-800 font-mono text-xs px-2 py-0.5 uppercase tracking-wider; }
+  .badge-danger  { @apply inline-flex items-center gap-1 bg-red-500/20 text-red-400 border border-red-800 font-mono text-xs px-2 py-0.5 uppercase tracking-wider; }
+  .badge-default { @apply inline-flex items-center gap-1 bg-carbon-700 text-carbon-300 border border-carbon-500 font-mono text-xs px-2 py-0.5 uppercase tracking-wider; }
 }
 
-/* ── Navbar ── */
-.navbar-brand {
-  font-size: 1.2rem;
-  letter-spacing: -0.3px;
+@layer utilities {
+  .animate-delay-100 { animation-delay: 100ms; }
+  .animate-delay-200 { animation-delay: 200ms; }
+  .animate-delay-300 { animation-delay: 300ms; }
+  .animate-delay-400 { animation-delay: 400ms; }
 }
-
-/* ── Cards ── */
-.card {
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
-}
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.10) !important;
-}
-
-/* ── Formularios ── */
-.form-control:focus,
-.form-select:focus {
-  border-color: var(--green-main);
-  box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.2);
-}
-
-/* ── Botones ── */
-.btn-success {
-  font-weight: 600;
-  letter-spacing: 0.2px;
-}
-
-/* ── Tablas ── */
-.table th {
-  font-weight: 600;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* ── Badge ── */
-.badge {
-  font-weight: 500;
-  letter-spacing: 0.3px;
-}
-
-/* ── Alertas ── */
-.alert-success {
-  background-color: #d1e7dd;
-  border-color: #a3cfbb;
-  color: #0a3622;
-}
-
-/* ── Responsive ── */
-@media (max-width: 576px) {
-  h1 { font-size: 1.75rem; }
-  h2 { font-size: 1.4rem; }
-  .display-4 { font-size: 2rem; }
-  .btn-lg { font-size: 1rem; }
-}
-
-/* ── Spinner de página ── */
-.page-spinner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 300px;
-}
-
-/* ── Scrollbar ── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #f1f1f1; }
-::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #aaa; }

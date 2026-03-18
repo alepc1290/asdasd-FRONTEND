@@ -1,6 +1,8 @@
+import React from 'react'
 import { useEffect, useState, useCallback } from 'react'
 import { useLocation } from 'react-router'
 import { toast } from 'sonner'
+import { Calendar, Clock, Trash2, CreditCard, CheckCircle, ChevronRight } from 'lucide-react'
 import {
   getCanchas, createReserva, getReservas,
   deleteReserva, getDisponibilidad,
@@ -10,7 +12,7 @@ import InstruccionesPago, { EstadoPagoBadge } from '../components/InstruccionesP
 
 const DURACIONES = [1, 2, 3]
 
-function Reservas() {
+export default function Reservas() {
   const { auth }  = useAuth()
   const location  = useLocation()
 
@@ -26,15 +28,13 @@ function Reservas() {
 
   const [disponibilidad, setDisponibilidad] = useState(null)
   const [loadingDisp,    setLoadingDisp]    = useState(false)
-
-  const [submitting,        setSubmitting]        = useState(false)
-  const [reservaCreada,     setReservaCreada]     = useState(null)   // datos para InstruccionesPago
-  const [mostrarInstruc,    setMostrarInstruc]    = useState(false)
+  const [submitting,     setSubmitting]     = useState(false)
+  const [reservaCreada,  setReservaCreada]  = useState(null)
+  const [mostrarInstruc, setMostrarInstruc] = useState(false)
 
   const hoy = new Date().toISOString().split('T')[0]
   const canchaSeleccionada = canchas.find((c) => c._id === canchaId)
 
-  // ── Carga inicial ──
   useEffect(() => {
     getCanchas()
       .then((res) => setCanchas(res.data.data.filter((c) => c.estado === 'disponible')))
@@ -43,16 +43,13 @@ function Reservas() {
     fetchMisReservas()
   }, [])
 
-  // ── Disponibilidad al cambiar cancha o fecha ──
   useEffect(() => {
-    setHoraInicio('')
-    setReservaCreada(null)
-    setMostrarInstruc(false)
+    setHoraInicio(''); setReservaCreada(null); setMostrarInstruc(false)
     if (!canchaId || !fecha) { setDisponibilidad(null); return }
     setLoadingDisp(true)
     getDisponibilidad(canchaId, fecha)
       .then((res) => setDisponibilidad(res.data.data))
-      .catch((err) => { console.error(err); toast.error('No se pudo cargar la disponibilidad'); setDisponibilidad(null) })
+      .catch((err) => { toast.error('No se pudo cargar la disponibilidad'); setDisponibilidad(null) })
       .finally(() => setLoadingDisp(false))
   }, [canchaId, fecha])
 
@@ -82,37 +79,26 @@ function Reservas() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!canchaId || !fecha || !horaInicio) {
-      toast.error('Seleccioná cancha, fecha y horario')
-      return
-    }
+    if (!canchaId || !fecha || !horaInicio) { toast.error('Seleccioná cancha, fecha y horario'); return }
     setSubmitting(true)
     try {
       const res = await createReserva({ canchaId, fecha, horaInicio, horaFin })
-      const nuevaReserva = res.data.data
-
-      // Guardar datos para mostrar instrucciones de pago
+      const nueva = res.data.data
       setReservaCreada({
-        _id:        nuevaReserva._id,
+        _id:        nueva._id,
         cancha:     canchaSeleccionada?.nombre,
-        fecha,
-        horaInicio,
-        horaFin,
+        fecha, horaInicio, horaFin,
         precio:     canchaSeleccionada?.precio || 0,
-        estadoPago: nuevaReserva.estadoPago,
-        tieneCalendar: !!nuevaReserva.googleEventId,
+        estadoPago: nueva.estadoPago,
+        tieneCalendar: !!nueva.googleEventId,
       })
       setMostrarInstruc(true)
       toast.success('¡Reserva creada! Realizá la transferencia para confirmarla.')
-
-      // Limpiar formulario y refrescar
       setHoraInicio(''); setFecha(''); setCanchaId(''); setDisponibilidad(null)
       fetchMisReservas()
     } catch (err) {
       toast.error(err.response?.data?.message || 'Error al crear la reserva')
-    } finally {
-      setSubmitting(false)
-    }
+    } finally { setSubmitting(false) }
   }
 
   const handleEliminar = async (id) => {
@@ -121,19 +107,13 @@ function Reservas() {
       await deleteReserva(id)
       toast.success('Reserva cancelada')
       fetchMisReservas()
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Error al eliminar')
-    }
+    } catch (err) { toast.error(err.response?.data?.message || 'Error al eliminar') }
   }
 
   const formatFecha = (f) =>
-    new Date(f + 'T12:00:00').toLocaleDateString('es-AR', {
-      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
-    })
+    new Date(f + 'T12:00:00').toLocaleDateString('es-AR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
 
-  const todosLosSlots = Array.from({ length: 15 }, (_, i) =>
-    `${String(i + 8).padStart(2, '0')}:00`
-  )
+  const todosLosSlots = Array.from({ length: 15 }, (_, i) => `${String(i + 8).padStart(2, '0')}:00`)
 
   const getSlotEstado = (slot) => {
     if (!disponibilidad) return 'sin-datos'
@@ -144,312 +124,327 @@ function Reservas() {
   }
 
   return (
-    <div className="py-5">
-      <div className="container">
+    <div className="max-w-6xl mx-auto px-4 py-16">
 
-        <div className="text-center mb-5">
-          <i className="bi bi-calendar-week text-success" style={{ fontSize: 48 }}></i>
-          <h1 className="fw-bold mt-2">Reservar cancha</h1>
-          <p className="text-muted">Elegí cancha, fecha y horario — pagás por transferencia</p>
-        </div>
+      <div className="mb-10">
+        <p className="section-label mb-2">Paso a paso</p>
+        <h1 className="section-title text-5xl md:text-6xl">Reservar cancha</h1>
+        <p className="text-carbon-300 mt-3 text-sm">Elegí cancha, fecha y horario — pagás por transferencia</p>
+      </div>
 
-        <div className="row g-4">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
 
-          {/* ══════════ COLUMNA IZQUIERDA ══════════ */}
-          <div className="col-lg-5">
+        {/* ── COLUMNA FORMULARIO ── */}
+        <div className="lg:col-span-2 space-y-6">
 
-            {/* Instrucciones de pago (aparecen tras reservar) */}
-            {mostrarInstruc && reservaCreada && (
-              <div className="mb-4">
-                <InstruccionesPago
-                  reserva={reservaCreada}
-                  onClose={() => setMostrarInstruc(false)}
+          {/* Instrucciones de pago */}
+          {mostrarInstruc && reservaCreada && (
+            <InstruccionesPago reserva={reservaCreada} onClose={() => setMostrarInstruc(false)} />
+          )}
+
+          {/* Formulario */}
+          <div className="bg-carbon-800 border border-carbon-600 p-6 sticky top-20">
+            <h2 className="font-display font-bold text-white uppercase tracking-wide text-sm mb-6 flex items-center gap-2">
+              <Calendar size={16} className="text-verde-500" /> Nueva reserva
+            </h2>
+
+            <form onSubmit={handleSubmit} className="space-y-5">
+
+              {/* Paso 1 */}
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="font-mono text-verde-500 text-xs bg-verde-500/10 border border-verde-700 px-2 py-1">01</span>
+                  <span className="font-display font-bold text-white uppercase tracking-wide text-xs">Cancha</span>
+                </div>
+                {loadingCanchas ? (
+                  <div className="flex items-center gap-2 text-carbon-400 text-sm">
+                    <div className="w-4 h-4 border-2 border-carbon-600 border-t-verde-500 rounded-full animate-spin" />
+                    Cargando...
+                  </div>
+                ) : (
+                  <select
+                    className="input-field"
+                    value={canchaId}
+                    onChange={(e) => { setCanchaId(e.target.value); setHoraInicio('') }}
+                    required
+                  >
+                    <option value="">— Elegí una cancha —</option>
+                    {canchas.map((c) => (
+                      <option key={c._id} value={c._id}>
+                        {c.nombre} ({c.tipo === 'futbol5' ? 'F5' : 'F7'}) — ${c.precio?.toLocaleString()}/h
+                      </option>
+                    ))}
+                  </select>
+                )}
+                {canchaSeleccionada?.descripcion && (
+                  <p className="text-carbon-400 text-xs mt-2 pl-1">{canchaSeleccionada.descripcion}</p>
+                )}
+              </div>
+
+              {/* Paso 2 */}
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="font-mono text-verde-500 text-xs bg-verde-500/10 border border-verde-700 px-2 py-1">02</span>
+                  <span className="font-display font-bold text-white uppercase tracking-wide text-xs">Fecha</span>
+                </div>
+                <input
+                  type="date"
+                  className="input-field [color-scheme:dark]"
+                  min={hoy}
+                  value={fecha}
+                  onChange={(e) => { setFecha(e.target.value); setHoraInicio('') }}
+                  required
                 />
               </div>
-            )}
 
-            {/* Formulario */}
-            <div className="card shadow-sm border-0 sticky-top" style={{ top: 80 }}>
-              <div className="card-body p-4">
-                <h5 className="fw-bold mb-4">
-                  <i className="bi bi-pencil-square me-2 text-success"></i>
-                  Nueva reserva
-                </h5>
+              {/* Paso 3 */}
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="font-mono text-verde-500 text-xs bg-verde-500/10 border border-verde-700 px-2 py-1">03</span>
+                  <span className="font-display font-bold text-white uppercase tracking-wide text-xs">Duración</span>
+                </div>
+                <div className="flex gap-2">
+                  {DURACIONES.map((d) => (
+                    <button
+                      key={d} type="button"
+                      onClick={() => { setDuracion(d); setHoraInicio('') }}
+                      className={`flex-1 py-2 text-sm font-display font-bold uppercase tracking-wider transition-all ${
+                        duracion === d
+                          ? 'bg-verde-500 text-carbon-900'
+                          : 'bg-carbon-700 border border-carbon-500 text-carbon-300 hover:border-verde-600 hover:text-white'
+                      }`}
+                    >
+                      {d}h
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-                <form onSubmit={handleSubmit}>
+              {/* Paso 4 */}
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="font-mono text-verde-500 text-xs bg-verde-500/10 border border-verde-700 px-2 py-1">04</span>
+                  <span className="font-display font-bold text-white uppercase tracking-wide text-xs">Horario</span>
+                </div>
 
-                  {/* Paso 1: Cancha */}
-                  <div className="mb-3">
-                    <label className="form-label fw-semibold">
-                      <span className="badge bg-success me-2">1</span>Cancha
-                    </label>
-                    {loadingCanchas ? (
-                      <div className="text-muted small">
-                        <span className="spinner-border spinner-border-sm me-2"></span>Cargando...
-                      </div>
-                    ) : (
-                      <select className="form-select form-select-lg" value={canchaId}
-                        onChange={(e) => { setCanchaId(e.target.value); setHoraInicio('') }} required>
-                        <option value="">Seleccioná una cancha</option>
-                        {canchas.map((c) => (
-                          <option key={c._id} value={c._id}>
-                            {c.nombre} — {c.tipo === 'futbol5' ? 'Fútbol 5' : 'Fútbol 7'} (${c.precio?.toLocaleString()}/h)
-                          </option>
-                        ))}
-                      </select>
-                    )}
-                    {canchaSeleccionada?.descripcion && (
-                      <div className="mt-2 px-2 py-1 bg-light rounded small text-muted">
-                        <i className="bi bi-geo-alt-fill text-success me-1"></i>
-                        {canchaSeleccionada.descripcion}
-                      </div>
-                    )}
+                {!canchaId || !fecha ? (
+                  <p className="text-carbon-500 text-xs italic">Primero seleccioná cancha y fecha</p>
+                ) : loadingDisp ? (
+                  <div className="flex items-center gap-2 text-carbon-400 text-sm">
+                    <div className="w-4 h-4 border-2 border-carbon-600 border-t-verde-500 rounded-full animate-spin" />
+                    Cargando disponibilidad...
                   </div>
-
-                  {/* Paso 2: Fecha */}
-                  <div className="mb-3">
-                    <label className="form-label fw-semibold">
-                      <span className="badge bg-success me-2">2</span>Fecha
-                    </label>
-                    <input type="date" className="form-control form-control-lg" min={hoy}
-                      value={fecha} onChange={(e) => { setFecha(e.target.value); setHoraInicio('') }} required />
-                  </div>
-
-                  {/* Paso 3: Duración */}
-                  <div className="mb-3">
-                    <label className="form-label fw-semibold">
-                      <span className="badge bg-success me-2">3</span>Duración del turno
-                    </label>
-                    <div className="d-flex gap-2">
-                      {DURACIONES.map((d) => (
-                        <button key={d} type="button"
-                          className={`btn flex-fill ${duracion === d ? 'btn-success' : 'btn-outline-secondary'}`}
-                          onClick={() => { setDuracion(d); setHoraInicio('') }}>
-                          {d}h
-                        </button>
+                ) : disponibilidad ? (
+                  <>
+                    {/* Leyenda */}
+                    <div className="flex gap-3 mb-3 flex-wrap">
+                      {[
+                        { color: 'bg-verde-500', label: 'Libre' },
+                        { color: 'bg-red-700',   label: 'Ocupado' },
+                        { color: 'bg-carbon-600',label: `No alcanza ${duracion}h` },
+                      ].map(({ color, label }) => (
+                        <span key={label} className="flex items-center gap-1.5 text-xs text-carbon-400">
+                          <span className={`w-2.5 h-2.5 ${color}`} />{label}
+                        </span>
                       ))}
                     </div>
-                  </div>
 
-                  {/* Paso 4: Horario */}
-                  <div className="mb-4">
-                    <label className="form-label fw-semibold">
-                      <span className="badge bg-success me-2">4</span>Horario de inicio
-                    </label>
+                    <div className="flex flex-wrap gap-1.5">
+                      {todosLosSlots.map((slot) => {
+                        const estado = getSlotEstado(slot)
+                        const styles = {
+                          seleccionado: 'bg-verde-500 text-carbon-900 font-bold',
+                          disponible:   'bg-carbon-700 border border-carbon-500 text-carbon-300 hover:border-verde-500 hover:text-verde-400 cursor-pointer',
+                          ocupado:      'bg-red-900/40 border border-red-900 text-red-600 cursor-not-allowed',
+                          'no-aplica':  'bg-carbon-800 border border-carbon-600 text-carbon-500 cursor-not-allowed',
+                          'sin-datos':  'bg-carbon-800 border border-carbon-600 text-carbon-500 cursor-not-allowed',
+                        }
+                        return (
+                          <button
+                            key={slot} type="button"
+                            className={`px-2.5 py-1.5 font-mono text-xs transition-all ${styles[estado]}`}
+                            disabled={['ocupado','no-aplica','sin-datos'].includes(estado)}
+                            onClick={() => setHoraInicio(slot === horaInicio ? '' : slot)}
+                          >
+                            {slot}
+                            {estado === 'seleccionado' && ' ✓'}
+                          </button>
+                        )
+                      })}
+                    </div>
 
-                    {!canchaId || !fecha ? (
-                      <div className="alert alert-light border text-muted small text-center py-3">
-                        <i className="bi bi-arrow-up-circle me-1"></i>
-                        Seleccioná una cancha y una fecha
-                      </div>
-                    ) : loadingDisp ? (
-                      <div className="text-center py-3">
-                        <div className="spinner-border spinner-border-sm text-success me-2"></div>
-                        <span className="text-muted small">Cargando disponibilidad...</span>
-                      </div>
-                    ) : disponibilidad ? (
-                      <>
-                        <div className="d-flex flex-wrap gap-3 mb-2">
-                          {[
-                            { color: 'success', label: 'Disponible' },
-                            { color: 'danger',  label: 'Ocupado' },
-                            { color: 'secondary', label: `No alcanza ${duracion}h` },
-                          ].map(({ color, label }) => (
-                            <span key={label} className="d-flex align-items-center gap-1 small">
-                              <span className={`badge bg-${color}`}>&nbsp;</span>{label}
-                            </span>
-                          ))}
-                        </div>
-                        <div className="d-flex flex-wrap gap-2">
-                          {todosLosSlots.map((slot) => {
-                            const estado = getSlotEstado(slot)
-                            const finSlot = `${String(parseInt(slot) + duracion).padStart(2, '0')}:00`
-                            const clases = {
-                              seleccionado: 'btn btn-success btn-sm',
-                              disponible:   'btn btn-outline-success btn-sm',
-                              ocupado:      'btn btn-danger btn-sm',
-                              'no-aplica':  'btn btn-outline-secondary btn-sm',
-                              'sin-datos':  'btn btn-outline-secondary btn-sm',
-                            }
-                            return (
-                              <button key={slot} type="button"
-                                className={clases[estado]}
-                                style={{ minWidth: 64 }}
-                                disabled={estado === 'ocupado' || estado === 'no-aplica' || estado === 'sin-datos'}
-                                title={estado === 'disponible' ? `Reservar ${slot}–${finSlot}` : estado === 'ocupado' ? 'Ocupado' : `Sin ${duracion}h consecutivas`}
-                                onClick={() => setHoraInicio(slot === horaInicio ? '' : slot)}>
-                                {slot}
-                                {estado === 'seleccionado' && <i className="bi bi-check-lg ms-1"></i>}
-                              </button>
-                            )
-                          })}
-                        </div>
-                        {horaInicio && (
-                          <div className="alert alert-success py-2 mt-3 small d-flex justify-content-between">
-                            <span>
-                              <i className="bi bi-clock-fill me-2"></i>
-                              <strong>{horaInicio} – {horaFin} hs</strong>
-                            </span>
-                            {canchaSeleccionada && (
-                              <strong>${(canchaSeleccionada.precio * duracion).toLocaleString()}</strong>
-                            )}
-                          </div>
+                    {horaInicio && (
+                      <div className="mt-3 bg-verde-500/10 border border-verde-700 px-4 py-2 flex justify-between items-center">
+                        <span className="text-verde-400 text-sm font-mono">
+                          {horaInicio} – {horaFin} hs
+                        </span>
+                        {canchaSeleccionada && (
+                          <span className="font-display font-black text-verde-400 text-lg">
+                            ${(canchaSeleccionada.precio * duracion).toLocaleString()}
+                          </span>
                         )}
-                      </>
-                    ) : null}
-                  </div>
-
-                  {/* Info pago */}
-                  <div className="alert alert-light border small py-2 mb-3 d-flex gap-2 align-items-center">
-                    <i className="bi bi-bank text-success flex-shrink-0"></i>
-                    <span>El pago se realiza por <strong>transferencia bancaria</strong> tras confirmar la reserva.</span>
-                  </div>
-
-                  <button type="submit" className="btn btn-success w-100 btn-lg fw-bold"
-                    disabled={submitting || !horaInicio}>
-                    {submitting
-                      ? <><span className="spinner-border spinner-border-sm me-2"></span>Reservando...</>
-                      : <><i className="bi bi-calendar-plus me-2"></i>Confirmar reserva</>}
-                  </button>
-                </form>
+                      </div>
+                    )}
+                  </>
+                ) : null}
               </div>
-            </div>
+
+              {/* Info pago */}
+              <div className="bg-carbon-700 border border-carbon-500 px-4 py-3 flex gap-2 items-center">
+                <CreditCard size={14} className="text-verde-500 flex-shrink-0" />
+                <span className="text-carbon-300 text-xs">El pago se realiza por <strong className="text-white">transferencia bancaria</strong> tras confirmar.</span>
+              </div>
+
+              <button
+                type="submit"
+                className="btn-primary w-full flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
+                disabled={submitting || !horaInicio}
+              >
+                {submitting
+                  ? <><div className="w-4 h-4 border-2 border-carbon-900/40 border-t-carbon-900 rounded-full animate-spin" /> Reservando...</>
+                  : <><CheckCircle size={16} /> Confirmar reserva</>
+                }
+              </button>
+            </form>
           </div>
+        </div>
 
-          {/* ══════════ COLUMNA DERECHA ══════════ */}
-          <div className="col-lg-7">
+        {/* ── COLUMNA DERECHA ── */}
+        <div className="lg:col-span-3 space-y-8">
 
-            {/* Selector visual canchas */}
-            <h5 className="fw-bold mb-3">
-              <i className="bi bi-grid me-2 text-success"></i>Canchas disponibles
-            </h5>
+          {/* Canchas */}
+          <div>
+            <h2 className="font-display font-bold text-white uppercase tracking-wide text-sm mb-4 flex items-center gap-2">
+              <ChevronRight size={14} className="text-verde-500" /> Canchas disponibles
+            </h2>
             {loadingCanchas ? (
-              <div className="text-center py-4"><div className="spinner-border text-success"></div></div>
-            ) : canchas.length === 0 ? (
-              <div className="text-center py-4 text-muted">
-                <i className="bi bi-emoji-frown" style={{ fontSize: 40 }}></i>
-                <p className="mt-2">No hay canchas disponibles</p>
+              <div className="flex items-center justify-center py-12">
+                <div className="w-8 h-8 border-2 border-carbon-600 border-t-verde-500 rounded-full animate-spin" />
               </div>
+            ) : canchas.length === 0 ? (
+              <p className="text-carbon-400 text-sm">No hay canchas disponibles.</p>
             ) : (
-              <div className="row g-3 mb-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {canchas.map((c) => {
                   const sel = canchaId === c._id
                   return (
-                    <div className="col-12 col-sm-6 col-md-4" key={c._id}>
-                      <div role="button"
-                        onClick={() => { setCanchaId(c._id); setHoraInicio('') }}
-                        className={`card h-100 shadow-sm border-2 ${sel ? 'border-success' : 'border-0'}`}
-                        style={{ cursor: 'pointer', transition: 'border-color .15s' }}>
-                        {c.imagen ? (
-                          <img src={c.imagen} alt={c.nombre} className="card-img-top" style={{ height: 100, objectFit: 'cover' }} />
-                        ) : (
-                          <div className="bg-success d-flex align-items-center justify-content-center" style={{ height: 100 }}>
-                            <i className="bi bi-dribbble text-white" style={{ fontSize: 36 }}></i>
-                          </div>
-                        )}
-                        <div className="card-body p-3">
-                          <div className="d-flex justify-content-between align-items-start">
-                            <h6 className="card-title mb-1">{c.nombre}</h6>
-                            {sel && <i className="bi bi-check-circle-fill text-success"></i>}
-                          </div>
-                          <p className="text-muted small mb-1">{c.tipo === 'futbol5' ? 'Fútbol 5' : 'Fútbol 7'}</p>
-                          <p className="fw-bold text-success mb-0">${c.precio?.toLocaleString()}/h</p>
+                    <button
+                      key={c._id} type="button"
+                      onClick={() => { setCanchaId(c._id); setHoraInicio('') }}
+                      className={`text-left bg-carbon-800 border transition-all duration-200 overflow-hidden group ${
+                        sel ? 'border-verde-500' : 'border-carbon-600 hover:border-verde-700'
+                      }`}
+                    >
+                      {c.imagen ? (
+                        <img src={c.imagen} alt={c.nombre} className="w-full h-24 object-cover" />
+                      ) : (
+                        <div className={`w-full h-24 flex items-center justify-center ${sel ? 'bg-verde-500/20' : 'bg-carbon-700'}`}>
+                          <span className="font-display font-black text-verde-500/50 text-2xl uppercase">
+                            {c.tipo === 'futbol5' ? 'F5' : 'F7'}
+                          </span>
                         </div>
+                      )}
+                      <div className="p-3">
+                        <div className="flex justify-between items-start">
+                          <h3 className="font-display font-bold text-white text-sm uppercase tracking-wide">{c.nombre}</h3>
+                          {sel && <CheckCircle size={14} className="text-verde-400 flex-shrink-0" />}
+                        </div>
+                        <p className="text-carbon-400 text-xs">{c.tipo === 'futbol5' ? 'Fútbol 5' : 'Fútbol 7'}</p>
+                        <p className="font-display font-black text-verde-400 text-lg mt-1">${c.precio?.toLocaleString()}/h</p>
                       </div>
-                    </div>
+                    </button>
                   )
                 })}
               </div>
             )}
+          </div>
 
-            {/* Mis reservas */}
-            <h5 className="fw-bold mb-3">
-              <i className="bi bi-clock-history me-2 text-success"></i>Mis reservas
-            </h5>
+          {/* Mis reservas */}
+          <div>
+            <h2 className="font-display font-bold text-white uppercase tracking-wide text-sm mb-4 flex items-center gap-2">
+              <Clock size={14} className="text-verde-500" /> Mis reservas
+            </h2>
 
             {loadingReservas ? (
-              <div className="text-center py-3">
-                <div className="spinner-border spinner-border-sm text-success"></div>
+              <div className="flex items-center justify-center py-12">
+                <div className="w-8 h-8 border-2 border-carbon-600 border-t-verde-500 rounded-full animate-spin" />
               </div>
             ) : misReservas.length === 0 ? (
-              <div className="text-center py-4 text-muted">
-                <i className="bi bi-calendar-x" style={{ fontSize: 40 }}></i>
-                <p className="mt-2 small">Todavía no tenés reservas</p>
+              <div className="flex flex-col items-center justify-center py-16 gap-3 text-center bg-carbon-800 border border-carbon-600">
+                <Calendar size={28} className="text-carbon-500" />
+                <p className="font-display font-bold text-white text-sm uppercase tracking-wide">Sin reservas</p>
+                <p className="text-carbon-400 text-xs">Todavía no tenés reservas registradas</p>
               </div>
             ) : (
-              <div className="d-flex flex-column gap-3">
+              <div className="space-y-3">
                 {misReservas.map((r) => (
-                  <div key={r._id} className={`card border-0 shadow-sm border-start border-4 border-${
-                    r.estadoPago === 'confirmado' ? 'success' :
-                    r.estadoPago === 'cancelado'  ? 'danger'  : 'warning'
-                  }`}>
-                    <div className="card-body p-3">
-                      <div className="d-flex justify-content-between align-items-start flex-wrap gap-2">
-                        <div>
-                          <div className="d-flex align-items-center gap-2 mb-1 flex-wrap">
-                            <p className="fw-semibold mb-0">
-                              <i className="bi bi-dribbble text-success me-1"></i>
+                  <div
+                    key={r._id}
+                    className={`bg-carbon-800 border-l-4 border border-carbon-600 ${
+                      r.estadoPago === 'confirmado' ? 'border-l-verde-500' :
+                      r.estadoPago === 'cancelado'  ? 'border-l-red-600'  : 'border-l-yellow-500'
+                    }`}
+                  >
+                    <div className="p-4">
+                      <div className="flex justify-between items-start flex-wrap gap-2">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 flex-wrap mb-2">
+                            <span className="font-display font-bold text-white uppercase tracking-wide text-sm">
                               {r.canchaId?.nombre || 'Cancha'}
-                            </p>
+                            </span>
                             <EstadoPagoBadge estado={r.estadoPago} />
+                            {r.googleEventId && (
+                              <span className="badge-success text-xs">
+                                <svg width="10" height="10" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline">
+                                  <path fill="#4285F4" d="M24 9.5c3.14 0 5.95 1.08 8.17 2.85l6.1-6.1C34.46 3.09 29.5 1 24 1 14.82 1 7.07 6.48 3.6 14.26l7.1 5.52C12.43 13.48 17.75 9.5 24 9.5z"/>
+                                </svg>
+                                {' '}Calendar
+                              </span>
+                            )}
                           </div>
-                          <p className="text-muted small mb-1">
-                            <i className="bi bi-calendar3 me-1"></i>{formatFecha(r.fecha)}
+                          <p className="text-carbon-400 text-xs font-mono mb-1">
+                            <Calendar size={10} className="inline mr-1" />{formatFecha(r.fecha)}
                           </p>
-                          <p className="text-muted small mb-0">
-                            <i className="bi bi-clock me-1"></i>
-                            {r.horaInicio} – {r.horaFin} hs
-                            <span className="ms-2 text-success fw-semibold">
-                              ({parseInt(r.horaFin) - parseInt(r.horaInicio)}h
-                              {r.canchaId?.precio && (
-                                <> · ${(r.canchaId.precio * (parseInt(r.horaFin) - parseInt(r.horaInicio))).toLocaleString()}</>
-                              )})
-                            </span>
+                          <p className="text-carbon-400 text-xs font-mono">
+                            <Clock size={10} className="inline mr-1" />{r.horaInicio} – {r.horaFin} hs
+                            {r.canchaId?.precio && (
+                              <span className="text-verde-400 ml-2 font-bold">
+                                ${(r.canchaId.precio * (parseInt(r.horaFin) - parseInt(r.horaInicio))).toLocaleString()}
+                              </span>
+                            )}
                           </p>
-                          {r.googleEventId && (
-                            <span className="badge bg-light text-success border border-success mt-2 small">
-                              <i className="bi bi-google me-1"></i>En Calendar
-                            </span>
-                          )}
                         </div>
 
-                        <div className="d-flex flex-column gap-2 align-items-end">
-                          {/* Botón ver instrucciones si está pendiente */}
+                        <div className="flex flex-col gap-2 items-end">
                           {r.estadoPago === 'pendiente' && (
                             <button
-                              className="btn btn-outline-success btn-sm"
+                              className="btn-outline text-xs py-1.5 px-3 flex items-center gap-1"
                               onClick={() => {
                                 setReservaCreada({
-                                  _id:        r._id,
-                                  cancha:     r.canchaId?.nombre,
-                                  fecha:      r.fecha,
-                                  horaInicio: r.horaInicio,
-                                  horaFin:    r.horaFin,
-                                  precio:     r.canchaId?.precio || 0,
-                                  estadoPago: r.estadoPago,
+                                  _id: r._id, cancha: r.canchaId?.nombre,
+                                  fecha: r.fecha, horaInicio: r.horaInicio, horaFin: r.horaFin,
+                                  precio: r.canchaId?.precio || 0, estadoPago: r.estadoPago,
                                 })
                                 setMostrarInstruc(true)
                                 window.scrollTo({ top: 0, behavior: 'smooth' })
                               }}
                             >
-                              <i className="bi bi-bank me-1"></i>Ver pago
+                              <CreditCard size={12} /> Ver pago
                             </button>
                           )}
                           <button
-                            className="btn btn-outline-danger btn-sm"
+                            className="btn-danger flex items-center gap-1"
                             onClick={() => handleEliminar(r._id)}
                             title="Cancelar reserva"
                           >
-                            <i className="bi bi-trash"></i>
+                            <Trash2 size={12} /> Cancelar
                           </button>
                         </div>
                       </div>
 
-                      {/* Aviso pendiente */}
                       {r.estadoPago === 'pendiente' && (
-                        <div className="alert alert-warning py-1 px-2 mt-2 mb-0 small d-flex align-items-center gap-2">
-                          <i className="bi bi-exclamation-triangle-fill flex-shrink-0"></i>
-                          <span>Reserva pendiente de pago. Realizá la transferencia y enviá el comprobante.</span>
+                        <div className="mt-3 border border-yellow-900 bg-yellow-900/20 px-3 py-2 text-yellow-400 text-xs font-mono">
+                          ⚠ Reserva pendiente de pago. Realizá la transferencia y enviá el comprobante.
                         </div>
                       )}
                     </div>
@@ -458,11 +453,8 @@ function Reservas() {
               </div>
             )}
           </div>
-
         </div>
       </div>
     </div>
   )
 }
-
-export default Reservas

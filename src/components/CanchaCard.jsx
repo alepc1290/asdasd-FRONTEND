@@ -1,43 +1,74 @@
+import React from 'react'
 import { Link } from 'react-router'
+import { Users, ArrowRight } from 'lucide-react'
 
-const TIPO_LABEL = { futbol5: 'Fútbol 5', futbol7: 'Fútbol 7', futbol7: 'Fútbol 11' }
-const ESTADO_COLOR = { disponible: 'success', mantenimiento: 'warning', inactiva: 'danger' }
+const TIPO_LABEL = { futbol5: 'Fútbol 5', futbol7: 'Fútbol 7', futbol11: 'Fútbol 11' }
 
-function CanchaCard({ cancha, showReservar = true }) {
+export default function CanchaCard({ cancha, showReservar = true }) {
+  const disponible = cancha.estado === 'disponible'
+
   return (
-    <div className="card h-100 shadow-sm border-0">
-      {cancha.imagen ? (
-        <img src={cancha.imagen} alt={cancha.nombre} className="card-img-top" style={{ height: 180, objectFit: 'cover' }} />
-      ) : (
-        <div className="bg-success d-flex align-items-center justify-content-center" style={{ height: 180 }}>
-          <i className="bi bi-dribbble text-white" style={{ fontSize: 64 }}></i>
-        </div>
-      )}
-      <div className="card-body d-flex flex-column">
-        <div className="d-flex justify-content-between align-items-start mb-2">
-          <h5 className="card-title mb-0">{cancha.nombre}</h5>
-          <span className={`badge bg-${ESTADO_COLOR[cancha.estado] || 'secondary'}`}>
-            {cancha.estado}
-          </span>
-        </div>
-        <p className="text-muted small mb-1">
-          <i className="bi bi-tag me-1"></i>{TIPO_LABEL[cancha.tipo] || cancha.tipo}
-        </p>
-        <p className="text-muted small mb-2">{cancha.descripcion}</p>
-        <p className="fw-bold text-success fs-5 mb-3">
-          ${cancha.precio?.toLocaleString()} / hora
-        </p>
-        {showReservar && cancha.estado === 'disponible' && (
-          <Link to="/reservas" state={{ canchaId: cancha._id }} className="btn btn-success mt-auto">
-            <i className="bi bi-calendar-plus me-2"></i>Reservar
-          </Link>
+    <article className="card group flex flex-col">
+      {/* Image */}
+      <div className="relative overflow-hidden h-48">
+        {cancha.imagen ? (
+          <img
+            src={cancha.imagen}
+            alt={cancha.nombre}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div className="w-full h-full bg-carbon-700 flex items-center justify-center">
+            <div className="w-16 h-16 border-2 border-verde-500/30 flex items-center justify-center">
+              <Users size={28} className="text-verde-500/50" />
+            </div>
+          </div>
         )}
-        {cancha.estado !== 'disponible' && (
-          <button className="btn btn-secondary mt-auto" disabled>No disponible</button>
-        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-carbon-900/80 to-transparent" />
+
+        <span className={`absolute top-3 right-3 font-mono text-xs px-2 py-1 uppercase tracking-widest ${
+          disponible ? 'bg-verde-500 text-carbon-900' : 'bg-carbon-600 text-carbon-300'
+        }`}>
+          {disponible ? 'Disponible' : cancha.estado}
+        </span>
+
+        <span className="absolute bottom-3 left-3 tag">
+          {TIPO_LABEL[cancha.tipo] || cancha.tipo}
+        </span>
       </div>
-    </div>
+
+      {/* Content */}
+      <div className="p-5 flex flex-col flex-1">
+        <h3 className="font-display font-black text-white text-xl uppercase tracking-wide mb-1">
+          {cancha.nombre}
+        </h3>
+        {cancha.descripcion && (
+          <p className="text-carbon-300 text-xs mb-3 leading-relaxed">{cancha.descripcion}</p>
+        )}
+
+        <div className="mt-auto flex items-center justify-between gap-3">
+          <div>
+            <span className="font-mono text-xs text-carbon-400 block">Precio / hora</span>
+            <span className="font-display font-black text-verde-400 text-2xl">
+              ${cancha.precio?.toLocaleString('es-AR')}
+            </span>
+          </div>
+
+          {showReservar && disponible ? (
+            <Link
+              to="/reservas"
+              state={{ canchaId: cancha._id }}
+              className="btn-primary text-xs py-2 px-4 flex items-center gap-1"
+            >
+              Reservar <ArrowRight size={12} />
+            </Link>
+          ) : (
+            <button disabled className="btn-outline text-xs py-2 px-4 opacity-40 cursor-not-allowed">
+              No disponible
+            </button>
+          )}
+        </div>
+      </div>
+    </article>
   )
 }
-
-export default CanchaCard

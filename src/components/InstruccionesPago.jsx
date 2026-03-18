@@ -1,25 +1,26 @@
+import React from 'react'
 import { useEffect, useState } from 'react'
 import { getDatosTransferencia } from '../services/api'
+import { X, Copy, Check, Banknote, Clock, CheckCircle, XCircle } from 'lucide-react'
 
 const ESTADO_CONFIG = {
-  pendiente: { color: 'warning', icon: 'bi-clock-fill', label: 'Pago pendiente' },
-  confirmado: { color: 'success', icon: 'bi-check-circle-fill', label: 'Pago confirmado' },
-  cancelado: { color: 'danger', icon: 'bi-x-circle-fill', label: 'Cancelado' },
+  pendiente:  { cls: 'badge-warning', icon: Clock,         label: 'Pago pendiente' },
+  confirmado: { cls: 'badge-success', icon: CheckCircle,   label: 'Pago confirmado' },
+  cancelado:  { cls: 'badge-danger',  icon: XCircle,       label: 'Cancelado' },
 }
 
-// Badge de estado reutilizable
 export function EstadoPagoBadge({ estado }) {
   const cfg = ESTADO_CONFIG[estado] || ESTADO_CONFIG.pendiente
+  const Icon = cfg.icon
   return (
-    <span className={`badge bg-${cfg.color} d-inline-flex align-items-center gap-1`}>
-      <i className={`bi ${cfg.icon}`} style={{ fontSize: 11 }}></i>
+    <span className={cfg.cls}>
+      <Icon size={10} />
       {cfg.label}
     </span>
   )
 }
 
-// Panel completo de instrucciones (se muestra tras crear una reserva)
-function InstruccionesPago({ reserva, onClose }) {
+export default function InstruccionesPago({ reserva, onClose }) {
   const [datos, setDatos] = useState(null)
   const [loading, setLoading] = useState(true)
   const [copiado, setCopiado] = useState('')
@@ -38,147 +39,76 @@ function InstruccionesPago({ reserva, onClose }) {
   }
 
   const totalPago = reserva
-    ? `$${(reserva.precio * (parseInt(reserva.horaFin) - parseInt(reserva.horaInicio))).toLocaleString()}`
+    ? `$${(reserva.precio * (parseInt(reserva.horaFin) - parseInt(reserva.horaInicio))).toLocaleString('es-AR')}`
     : ''
 
   if (loading) {
     return (
-      <div className="text-center py-4">
-        <div className="spinner-border spinner-border-sm text-success"></div>
+      <div className="bg-carbon-800 border border-carbon-600 p-6 flex items-center justify-center">
+        <div className="w-6 h-6 border-2 border-carbon-600 border-t-verde-500 rounded-full animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="card border-success border-2 shadow">
+    <div className="bg-carbon-800 border border-verde-700 overflow-hidden">
       {/* Header */}
-      <div className="card-header bg-success text-white d-flex justify-content-between align-items-center">
-        <span className="fw-bold">
-          <i className="bi bi-bank me-2"></i>
-          Instrucciones de pago
+      <div className="bg-verde-600 px-5 py-3 flex justify-between items-center">
+        <span className="font-display font-bold text-carbon-900 uppercase tracking-widest text-sm flex items-center gap-2">
+          <Banknote size={16} /> Instrucciones de pago
         </span>
         {onClose && (
-          <button className="btn btn-sm btn-outline-light py-0" onClick={onClose}>
-            <i className="bi bi-x-lg"></i>
+          <button onClick={onClose} className="text-carbon-900/70 hover:text-carbon-900 transition-colors">
+            <X size={18} />
           </button>
         )}
       </div>
 
-      <div className="card-body p-4">
+      <div className="p-5 space-y-4">
         {/* Resumen reserva */}
-        {reserva && (
-          <div className="alert alert-success border-0 py-2 mb-4 small">
-            <i className="bi bi-calendar-check me-2"></i>
-            <strong>{reserva.cancha}</strong> — {reserva.fecha} · {reserva.horaInicio}–{reserva.horaFin} hs
-            <span className="ms-2 fw-bold">{totalPago}</span>
+        <div className="bg-carbon-700 border border-carbon-500 p-4 space-y-1">
+          <p className="section-label mb-2">Detalle de la reserva</p>
+          <p className="text-white text-sm"><span className="text-carbon-400">Cancha:</span> {reserva?.cancha}</p>
+          <p className="text-white text-sm"><span className="text-carbon-400">Fecha:</span> {reserva?.fecha}</p>
+          <p className="text-white text-sm"><span className="text-carbon-400">Horario:</span> {reserva?.horaInicio} – {reserva?.horaFin} hs</p>
+          <div className="pt-2 border-t border-carbon-500 flex justify-between items-center">
+            <span className="font-mono text-xs text-carbon-400 uppercase">Total a transferir</span>
+            <span className="font-display font-black text-verde-400 text-2xl">{totalPago}</span>
           </div>
-        )}
-
-        {/* Paso a paso */}
-        <p className="fw-semibold mb-3">
-          <i className="bi bi-info-circle text-success me-2"></i>
-          Para confirmar tu reserva, realizá una transferencia bancaria:
-        </p>
-
-        {datos && (
-          <div className="d-flex flex-column gap-3 mb-4">
-            {/* CBU */}
-            <div className="d-flex justify-content-between align-items-center p-3 bg-light rounded">
-              <div>
-                <div className="text-muted small mb-1">CBU</div>
-                <div className="fw-bold font-monospace">123124124123123</div>
-              </div>
-              <button
-                className={`btn btn-sm ${copiado === 'cbu' ? 'btn-success' : 'btn-outline-secondary'}`}
-                onClick={() => copiar(datos.cbu, 'cbu')}
-              >
-                {copiado === 'cbu'
-                  ? <><i className="bi bi-check-lg me-1"></i>Copiado</>
-                  : <><i className="bi bi-clipboard me-1"></i>Copiar</>
-                }
-              </button>
-            </div>
-
-            {/* Alias */}
-            <div className="d-flex justify-content-between align-items-center p-3 bg-light rounded">
-              <div>
-                <div className="text-muted small mb-1">Alias</div>
-                <div className="fw-bold">{datos.alias}</div>
-              </div>
-              <button
-                className={`btn btn-sm ${copiado === 'alias' ? 'btn-success' : 'btn-outline-secondary'}`}
-                onClick={() => copiar(datos.alias, 'alias')}
-              >
-                {copiado === 'alias'
-                  ? <><i className="bi bi-check-lg me-1"></i>Copiado</>
-                  : <><i className="bi bi-clipboard me-1"></i>Copiar</>
-                }
-              </button>
-            </div>
-
-            {/* Titular y banco */}
-            <div className="row g-3">
-              <div className="col-6">
-                <div className="p-3 bg-light rounded h-100">
-                  <div className="text-muted small mb-1">Titular</div>
-                  <div className="fw-semibold small">{datos.titular}</div>
-                </div>
-              </div>
-              <div className="col-6">
-                <div className="p-3 bg-light rounded h-100">
-                  <div className="text-muted small mb-1">Banco</div>
-                  <div className="fw-semibold small">{datos.banco}</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Monto */}
-            {reserva && (
-              <div className="d-flex justify-content-between align-items-center p-3 border border-success rounded">
-                <div>
-                  <div className="text-muted small mb-1">Monto a transferir</div>
-                  <div className="fw-bold text-success fs-5">{totalPago}</div>
-                </div>
-                <button
-                  className={`btn btn-sm ${copiado === 'monto' ? 'btn-success' : 'btn-outline-success'}`}
-                  onClick={() => copiar(totalPago.replace('$', '').replace('.', ''), 'monto')}
-                >
-                  {copiado === 'monto'
-                    ? <><i className="bi bi-check-lg me-1"></i>Copiado</>
-                    : <><i className="bi bi-clipboard me-1"></i>Copiar</>
-                  }
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Pasos */}
-        <div className="border rounded p-3 mb-4">
-          <p className="fw-semibold small mb-2">
-            <i className="bi bi-list-ol me-2 text-success"></i>Pasos a seguir
-          </p>
-          <ol className="mb-0 ps-3 small text-muted">
-            <li className="mb-1">Realizá la transferencia por el monto exacto</li>
-            <li className="mb-1">Guardá el comprobante</li>
-            <li className="mb-1">Envialo por WhatsApp para confirmar</li>
-            <li>El admin confirmará tu pago y la reserva quedará activa</li>
-          </ol>
         </div>
 
-        {/* WhatsApp CTA */}
+        {/* Datos bancarios */}
+        {datos && (
+          <div className="space-y-3">
+            <p className="section-label">Datos bancarios</p>
+            {[
+              { label: 'Titular', value: datos.titular },
+              { label: 'Banco', value: datos.banco },
+              { label: 'CBU', value: datos.cbu, copiable: true },
+              { label: 'Alias', value: datos.alias, copiable: true },
+            ].map(({ label, value, copiable }) => value && (
+              <div key={label} className="flex items-center justify-between bg-carbon-700 border border-carbon-500 px-4 py-2">
+                <div>
+                  <span className="font-mono text-xs text-carbon-400 uppercase block">{label}</span>
+                  <span className="text-white text-sm font-mono">{value}</span>
+                </div>
+                {copiable && (
+                  <button onClick={() => copiar(value, label)} className="text-carbon-400 hover:text-verde-400 transition-colors ml-3">
+                    {copiado === label ? <Check size={16} className="text-verde-400" /> : <Copy size={16} />}
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
         {datos?.whatsapp && (
           <a
-            href={`https://wa.me/5493812155521?text=${encodeURIComponent(
-              reserva
-                ? `Hola! Acabo de hacer una reserva:\n• Cancha: ${reserva.cancha}\n• Fecha: ${reserva.fecha}\n• Horario: ${reserva.horaInicio}–${reserva.horaFin} hs\n• Monto: ${totalPago}\nAdjunto comprobante de transferencia.`
-                : 'Hola! Quiero confirmar el pago de mi reserva. Adjunto comprobante.'
-            )}`}
+            href={`https://wa.me/${datos.whatsapp}?text=Hola! Realicé la transferencia para mi reserva del ${reserva?.fecha} a las ${reserva?.horaInicio} hs. Adjunto comprobante.`}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-success w-100 fw-bold"
+            className="btn-primary w-full text-center block text-xs"
           >
-            <i className="bi bi-whatsapp me-2"></i>
             Enviar comprobante por WhatsApp
           </a>
         )}
@@ -186,5 +116,3 @@ function InstruccionesPago({ reserva, onClose }) {
     </div>
   )
 }
-
-export default InstruccionesPago

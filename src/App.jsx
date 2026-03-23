@@ -16,6 +16,7 @@ import VerifyEmail from "./pages/VerifyEmail";
 import GoogleAuthSuccess from "./pages/GoogleAuthSuccess";
 import NosotrosPage from "./pages/NosotrosPage";
 import ContactoPage from "./pages/ContactoPage";
+import GaleriaPage from "./pages/GaleriaPage";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/productos" element={<Productos />} />
+              <Route path="/GaleriaPage" element={<GaleriaPage />} />
               <Route path="/verify-email" element={<VerifyEmail />} />
               <Route
                 path="/auth/google/success"

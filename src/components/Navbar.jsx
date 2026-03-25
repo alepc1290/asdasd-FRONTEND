@@ -1,8 +1,9 @@
 import React from 'react'
 import { useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router'
-import { Zap, Menu, X, LogOut, User, Shield } from 'lucide-react'
+import { Menu, X, LogOut, User, Shield } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
+import logo from "./img/LogoImagen.png"
 
 export default function Navbar() {
   const { isLogged, isAdmin, auth, logout } = useAuth()
@@ -23,13 +24,12 @@ export default function Navbar() {
       <nav className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
 
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 group">
-          <span className="w-8 h-8 bg-verde-500 flex items-center justify-center">
-            <Zap size={16} className="text-carbon-900" fill="currentColor" />
-          </span>
-          <span className="font-display font-black text-white uppercase text-lg tracking-wider">
-            Canchas<span className="text-verde-400">&Deportes</span>
-          </span>
+        <Link to="/" className="flex items-center group">
+          <img
+            src={logo}
+            alt="RC Sport Logo"
+            className="h-12 w-auto "
+          />
         </Link>
 
         {/* Desktop links */}

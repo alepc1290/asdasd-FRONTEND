@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router'
 import { Zap, MapPin, Phone, Mail } from 'lucide-react'
+import logo from "./img/LogoImagen.png"
 
 export default function Footer() {
   return (
@@ -10,11 +11,12 @@ export default function Footer() {
 
           <div>
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <span className="w-8 h-8 bg-verde-500 flex items-center justify-center">
-                <Zap size={16} className="text-carbon-900" fill="currentColor" />
-              </span>
-              <span className="font-display font-black text-white uppercase text-lg tracking-wider">
-                Canchas<span className="text-verde-400">&Deportes</span>
+              <span className="w-auto h-8 flex items-center justify-center">
+                <img
+                            src={logo}
+                            alt="RC Sport Logo"
+                            className="h-12 w-auto "
+                          />
               </span>
             </Link>
             <p className="text-carbon-300 text-sm leading-relaxed">
@@ -44,15 +46,15 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-center gap-2 text-carbon-300 text-sm">
                 <MapPin size={14} className="text-verde-500 flex-shrink-0" />
-                Av. Siempreviva 742, Springfield
+                General Paz 576, San Miguel de Tucumán.
               </li>
               <li className="flex items-center gap-2 text-carbon-300 text-sm">
                 <Phone size={14} className="text-verde-500 flex-shrink-0" />
-                +54 9 11 1234-5678
+                +54 9 381 365 7948
               </li>
               <li className="flex items-center gap-2 text-carbon-300 text-sm">
                 <Mail size={14} className="text-verde-500 flex-shrink-0" />
-                info@canchas.com.ar
+                gestiondecanchaproyecto@gmail.com
               </li>
             </ul>
           </div>
@@ -60,7 +62,7 @@ export default function Footer() {
 
         <div className="border-t border-carbon-700 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-2">
           <p className="text-carbon-400 text-xs font-mono">
-            © {new Date().getFullYear()} Canchas & Deportes — Todos los derechos reservados
+            © {new Date().getFullYear()} RC SPORT — Todos los derechos reservados
           </p>
           <p className="text-carbon-400 text-xs">
             Lunes a Domingo · 08:00 – 23:00 hs

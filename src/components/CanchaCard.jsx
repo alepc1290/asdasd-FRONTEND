@@ -9,7 +9,7 @@ export default function CanchaCard({ cancha, showReservar = true }) {
 
   return (
     <article className="card group flex flex-col">
-      {/* Image */}
+      {/* Imagen */}
       <div className="relative overflow-hidden h-48">
         {cancha.imagen ? (
           <img
@@ -37,7 +37,7 @@ export default function CanchaCard({ cancha, showReservar = true }) {
         </span>
       </div>
 
-      {/* Content */}
+      {/* Contenido */}
       <div className="p-5 flex flex-col flex-1">
         <h3 className="font-display font-black text-white text-xl uppercase tracking-wide mb-1">
           {cancha.nombre}

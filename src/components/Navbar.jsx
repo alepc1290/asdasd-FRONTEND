@@ -4,7 +4,7 @@ import { Link, NavLink, useNavigate } from 'react-router'
 import { Zap, Menu, X, LogOut, User, Shield } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
-export default function Navbar() {
+function Navbar() {
   const { isLogged, isAdmin, auth, logout } = useAuth()
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
@@ -12,7 +12,7 @@ export default function Navbar() {
   const handleLogout = () => { logout(); navigate('/') }
 
   const links = [
-    { to: '/',         label: 'Inicio',  end: true },
+    { to: '/', label: 'Inicio', end: true },
     { to: '/reservas', label: 'Reservar' },
     { to: '/productos', label: 'Tienda' },
     ...(isAdmin ? [{ to: '/admin', label: 'Admin', admin: true }] : []),
@@ -22,7 +22,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 bg-carbon-900/95 backdrop-blur border-b border-carbon-700">
       <nav className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
 
-        {/* Logo */}
+        {/* Logo, hecho con lucide-react */}
         <Link to="/" className="flex items-center gap-2 group">
           <span className="w-8 h-8 bg-verde-500 flex items-center justify-center">
             <Zap size={16} className="text-carbon-900" fill="currentColor" />
@@ -40,10 +40,9 @@ export default function Navbar() {
                 to={to}
                 end={end}
                 className={({ isActive }) =>
-                  `px-4 py-2 font-body text-sm transition-colors duration-200 uppercase tracking-wider ${
-                    admin
-                      ? isActive ? 'text-yellow-400 border-b border-yellow-500' : 'text-yellow-500/70 hover:text-yellow-400'
-                      : isActive ? 'text-verde-400 border-b border-verde-500' : 'text-carbon-300 hover:text-white'
+                  `px-4 py-2 font-body text-sm transition-colors duration-200 uppercase tracking-wider ${admin
+                    ? isActive ? 'text-yellow-400 border-b border-yellow-500' : 'text-yellow-500/70 hover:text-yellow-400'
+                    : isActive ? 'text-verde-400 border-b border-verde-500' : 'text-carbon-300 hover:text-white'
                   }`
                 }
               >
@@ -53,7 +52,7 @@ export default function Navbar() {
           ))}
         </ul>
 
-        {/* Auth + hamburger */}
+        {/* Auth + boton hamburguesa */}
         <div className="flex items-center gap-3">
           {isLogged ? (
             <div className="hidden md:flex items-center gap-3">
@@ -92,8 +91,7 @@ export default function Navbar() {
                   end={end}
                   onClick={() => setOpen(false)}
                   className={({ isActive }) =>
-                    `block px-6 py-3 font-body text-sm uppercase tracking-wider transition-colors ${
-                      isActive ? 'text-verde-400 bg-carbon-700' : 'text-carbon-300 hover:text-white hover:bg-carbon-700'
+                    `block px-6 py-3 font-body text-sm uppercase tracking-wider transition-colors ${isActive ? 'text-verde-400 bg-carbon-700' : 'text-carbon-300 hover:text-white hover:bg-carbon-700'
                     }`
                   }
                 >
@@ -119,3 +117,5 @@ export default function Navbar() {
     </header>
   )
 }
+
+export default Navbar

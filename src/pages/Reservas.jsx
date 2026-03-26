@@ -13,23 +13,20 @@ import InstruccionesPago, { EstadoPagoBadge } from '../components/InstruccionesP
 const DURACIONES = [1, 2, 3]
 
 export default function Reservas() {
-  const { auth }  = useAuth()
-  const location  = useLocation()
-
-  const [canchas,      setCanchas]      = useState([])
-  const [misReservas,  setMisReservas]  = useState([])
-  const [loadingCanchas,  setLoadingCanchas]  = useState(true)
+  const { auth } = useAuth()
+  const location = useLocation()
+  const [canchas, setCanchas] = useState([])
+  const [misReservas, setMisReservas] = useState([])
+  const [loadingCanchas, setLoadingCanchas] = useState(true)
   const [loadingReservas, setLoadingReservas] = useState(true)
-
-  const [canchaId,   setCanchaId]   = useState(location.state?.canchaId || '')
-  const [fecha,      setFecha]      = useState('')
-  const [duracion,   setDuracion]   = useState(1)
+  const [canchaId, setCanchaId] = useState(location.state?.canchaId || '')
+  const [fecha, setFecha] = useState('')
+  const [duracion, setDuracion] = useState(1)
   const [horaInicio, setHoraInicio] = useState('')
-
   const [disponibilidad, setDisponibilidad] = useState(null)
-  const [loadingDisp,    setLoadingDisp]    = useState(false)
-  const [submitting,     setSubmitting]     = useState(false)
-  const [reservaCreada,  setReservaCreada]  = useState(null)
+  const [loadingDisp, setLoadingDisp] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [reservaCreada, setReservaCreada] = useState(null)
   const [mostrarInstruc, setMostrarInstruc] = useState(false)
 
   const hoy = new Date().toISOString().split('T')[0]
@@ -85,10 +82,10 @@ export default function Reservas() {
       const res = await createReserva({ canchaId, fecha, horaInicio, horaFin })
       const nueva = res.data.data
       setReservaCreada({
-        _id:        nueva._id,
-        cancha:     canchaSeleccionada?.nombre,
+        _id: nueva._id,
+        cancha: canchaSeleccionada?.nombre,
         fecha, horaInicio, horaFin,
-        precio:     canchaSeleccionada?.precio || 0,
+        precio: canchaSeleccionada?.precio || 0,
         estadoPago: nueva.estadoPago,
         tieneCalendar: !!nueva.googleEventId,
       })
@@ -208,11 +205,10 @@ export default function Reservas() {
                     <button
                       key={d} type="button"
                       onClick={() => { setDuracion(d); setHoraInicio('') }}
-                      className={`flex-1 py-2 text-sm font-display font-bold uppercase tracking-wider transition-all ${
-                        duracion === d
+                      className={`flex-1 py-2 text-sm font-display font-bold uppercase tracking-wider transition-all ${duracion === d
                           ? 'bg-verde-500 text-carbon-900'
                           : 'bg-carbon-700 border border-carbon-500 text-carbon-300 hover:border-verde-600 hover:text-white'
-                      }`}
+                        }`}
                     >
                       {d}h
                     </button>
@@ -240,8 +236,8 @@ export default function Reservas() {
                     <div className="flex gap-3 mb-3 flex-wrap">
                       {[
                         { color: 'bg-verde-500', label: 'Libre' },
-                        { color: 'bg-red-700',   label: 'Ocupado' },
-                        { color: 'bg-carbon-600',label: `No alcanza ${duracion}h` },
+                        { color: 'bg-red-700', label: 'Ocupado' },
+                        { color: 'bg-carbon-600', label: `No alcanza ${duracion}h` },
                       ].map(({ color, label }) => (
                         <span key={label} className="flex items-center gap-1.5 text-xs text-carbon-400">
                           <span className={`w-2.5 h-2.5 ${color}`} />{label}
@@ -254,16 +250,16 @@ export default function Reservas() {
                         const estado = getSlotEstado(slot)
                         const styles = {
                           seleccionado: 'bg-verde-500 text-carbon-900 font-bold',
-                          disponible:   'bg-carbon-700 border border-carbon-500 text-carbon-300 hover:border-verde-500 hover:text-verde-400 cursor-pointer',
-                          ocupado:      'bg-red-900/40 border border-red-900 text-red-600 cursor-not-allowed',
-                          'no-aplica':  'bg-carbon-800 border border-carbon-600 text-carbon-500 cursor-not-allowed',
-                          'sin-datos':  'bg-carbon-800 border border-carbon-600 text-carbon-500 cursor-not-allowed',
+                          disponible: 'bg-carbon-700 border border-carbon-500 text-carbon-300 hover:border-verde-500 hover:text-verde-400 cursor-pointer',
+                          ocupado: 'bg-red-900/40 border border-red-900 text-red-600 cursor-not-allowed',
+                          'no-aplica': 'bg-carbon-800 border border-carbon-600 text-carbon-500 cursor-not-allowed',
+                          'sin-datos': 'bg-carbon-800 border border-carbon-600 text-carbon-500 cursor-not-allowed',
                         }
                         return (
                           <button
                             key={slot} type="button"
                             className={`px-2.5 py-1.5 font-mono text-xs transition-all ${styles[estado]}`}
-                            disabled={['ocupado','no-aplica','sin-datos'].includes(estado)}
+                            disabled={['ocupado', 'no-aplica', 'sin-datos'].includes(estado)}
                             onClick={() => setHoraInicio(slot === horaInicio ? '' : slot)}
                           >
                             {slot}
@@ -331,9 +327,8 @@ export default function Reservas() {
                     <button
                       key={c._id} type="button"
                       onClick={() => { setCanchaId(c._id); setHoraInicio('') }}
-                      className={`text-left bg-carbon-800 border transition-all duration-200 overflow-hidden group ${
-                        sel ? 'border-verde-500' : 'border-carbon-600 hover:border-verde-700'
-                      }`}
+                      className={`text-left bg-carbon-800 border transition-all duration-200 overflow-hidden group ${sel ? 'border-verde-500' : 'border-carbon-600 hover:border-verde-700'
+                        }`}
                     >
                       {c.imagen ? (
                         <img src={c.imagen} alt={c.nombre} className="w-full h-24 object-cover" />
@@ -380,10 +375,9 @@ export default function Reservas() {
                 {misReservas.map((r) => (
                   <div
                     key={r._id}
-                    className={`bg-carbon-800 border-l-4 border border-carbon-600 ${
-                      r.estadoPago === 'confirmado' ? 'border-l-verde-500' :
-                      r.estadoPago === 'cancelado'  ? 'border-l-red-600'  : 'border-l-yellow-500'
-                    }`}
+                    className={`bg-carbon-800 border-l-4 border border-carbon-600 ${r.estadoPago === 'confirmado' ? 'border-l-verde-500' :
+                        r.estadoPago === 'cancelado' ? 'border-l-red-600' : 'border-l-yellow-500'
+                      }`}
                   >
                     <div className="p-4">
                       <div className="flex justify-between items-start flex-wrap gap-2">
@@ -396,7 +390,7 @@ export default function Reservas() {
                             {r.googleEventId && (
                               <span className="badge-success text-xs">
                                 <svg width="10" height="10" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="inline">
-                                  <path fill="#4285F4" d="M24 9.5c3.14 0 5.95 1.08 8.17 2.85l6.1-6.1C34.46 3.09 29.5 1 24 1 14.82 1 7.07 6.48 3.6 14.26l7.1 5.52C12.43 13.48 17.75 9.5 24 9.5z"/>
+                                  <path fill="#4285F4" d="M24 9.5c3.14 0 5.95 1.08 8.17 2.85l6.1-6.1C34.46 3.09 29.5 1 24 1 14.82 1 7.07 6.48 3.6 14.26l7.1 5.52C12.43 13.48 17.75 9.5 24 9.5z" />
                                 </svg>
                                 {' '}Calendar
                               </span>

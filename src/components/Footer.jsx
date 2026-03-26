@@ -29,6 +29,8 @@ export default function Footer() {
                 { to: '/',          label: 'Inicio' },
                 { to: '/reservas',  label: 'Reservar turno' },
                 { to: '/productos', label: 'Tienda' },
+                { to: '/GaleriaPage', label: 'Galeria de Imagenes' },
+                { to: '/ContactoPage', label: 'Contactanos' },
               ].map(({ to, label }) => (
                 <li key={to}>
                   <Link to={to} className="text-carbon-300 hover:text-verde-400 text-sm transition-colors">
@@ -44,7 +46,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-center gap-2 text-carbon-300 text-sm">
                 <MapPin size={14} className="text-verde-500 flex-shrink-0" />
-                Av. Siempreviva 742, Springfield
+                General Paz 576
               </li>
               <li className="flex items-center gap-2 text-carbon-300 text-sm">
                 <Phone size={14} className="text-verde-500 flex-shrink-0" />

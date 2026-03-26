@@ -1,7 +1,6 @@
-import React from 'react'
 import { Package } from 'lucide-react'
 
-export default function ProductoCard({ producto }) {
+function ProductoCard({ producto }) {
   return (
     <article className="card group flex flex-col">
       <div className="relative overflow-hidden h-48">
@@ -17,9 +16,8 @@ export default function ProductoCard({ producto }) {
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-carbon-900/60 to-transparent" />
-        <span className={`absolute top-3 right-3 font-mono text-xs px-2 py-1 uppercase tracking-widest ${
-          producto.stock > 0 ? 'bg-verde-500 text-carbon-900' : 'bg-carbon-600 text-carbon-300'
-        }`}>
+        <span className={`absolute top-3 right-3 font-mono text-xs px-2 py-1 uppercase tracking-widest ${producto.stock > 0 ? 'bg-verde-500 text-carbon-900' : 'bg-carbon-600 text-carbon-300'
+          }`}>
           {producto.stock > 0 ? `Stock: ${producto.stock}` : 'Sin stock'}
         </span>
       </div>
@@ -41,3 +39,4 @@ export default function ProductoCard({ producto }) {
     </article>
   )
 }
+export default ProductoCard

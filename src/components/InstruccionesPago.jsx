@@ -1,4 +1,3 @@
-import React from 'react'
 import { useEffect, useState } from 'react'
 import { getDatosTransferencia } from '../services/api'
 import { X, Copy, Check, Banknote, Clock, CheckCircle, XCircle } from 'lucide-react'

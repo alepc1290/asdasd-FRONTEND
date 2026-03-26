@@ -1,4 +1,3 @@
-import React from "react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { ArrowRight, Zap, Clock, Shield, Star } from "lucide-react";
@@ -6,7 +5,7 @@ import { getCanchas, getProductos } from "../services/api";
 import CanchaCard from "../components/CanchaCard";
 import ProductoCard from "../components/ProductoCard";
 
-const FEATURES = [
+const CARACTERISTICAS = [
   {
     icon: Zap,
     title: "Reserva Instantánea",
@@ -123,11 +122,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FEATURES ── */}
+      {/* ── CARACTERISTICAS ── */}
       <section className="py-16 border-y border-carbon-700 bg-carbon-800">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {FEATURES.map(({ icon: Icon, title, desc }) => (
+            {CARACTERISTICAS.map(({ icon: Icon, title, desc }) => (
               <div key={title} className="flex flex-col gap-3 group">
                 <div className="w-10 h-10 bg-carbon-700 border border-carbon-600 group-hover:border-verde-600 flex items-center justify-center transition-colors">
                   <Icon size={18} className="text-verde-500" />

@@ -1,4 +1,3 @@
-import React from 'react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { Plus, Pencil, Trash2, RefreshCw, X, Check, Shield } from 'lucide-react'
@@ -51,7 +50,7 @@ export default function AdminPanel() {
   const fetchUsuarios      = () => { setLoadingU(true); getUsers().then(r => setUsuarios(r.data.data)).catch(console.error).finally(() => setLoadingU(false)) }
   const fetchReservasAdmin = () => { setLoadingR(true); getReservasAdmin().then(r => setReservasAdmin(r.data.reservas)).catch(console.error).finally(() => setLoadingR(false)) }
 
-  // ── Canchas ──
+  // ==== Canchas ====
   const handleChangeC    = (e) => setFormCancha({ ...formCancha, [e.target.name]: e.target.value })
   const handleEditCancha = (c) => { setEditandoC(c._id); setFormCancha({ nombre: c.nombre, tipo: c.tipo, precio: c.precio, descripcion: c.descripcion || '', imagen: c.imagen || '', estado: c.estado }) }
   const cancelarEditC    = () => { setEditandoC(null); setFormCancha(CANCHA_VACIA) }
@@ -74,7 +73,7 @@ export default function AdminPanel() {
     catch (err) { toast.error(err.response?.data?.message || 'Error') }
   }
 
-  // ── Productos ──
+  // ==== Productos ====
   const handleChangeP      = (e) => setFormProducto({ ...formProducto, [e.target.name]: e.target.value })
   const handleEditProducto = (p) => { setEditandoP(p._id); setFormProducto({ nombre: p.nombre, precio: p.precio, stock: p.stock, descripcion: p.descripcion || '', imagen: p.imagen || '' }) }
   const cancelarEditP      = () => { setEditandoP(null); setFormProducto(PRODUCTO_VACIO) }
@@ -97,14 +96,14 @@ export default function AdminPanel() {
     catch (err) { toast.error(err.response?.data?.message || 'Error') }
   }
 
-  // ── Usuarios ──
+  // ==== Usuarios ====
   const handleDeleteUser = async (id) => {
     if (!confirm('¿Eliminar este usuario?')) return
     try { await deleteUser(id); toast.success('Usuario eliminado'); fetchUsuarios() }
     catch (err) { toast.error(err.response?.data?.message || 'Error') }
   }
 
-  // ── Reservas admin ──
+  // ==== Reservas admin ====
   const handleConfirmarPago = async (id, nombre) => {
     try { await confirmarPago(id); toast.success(`Pago de ${nombre} confirmado`); fetchReservasAdmin() }
     catch (err) { toast.error(err.response?.data?.message || 'Error') }
@@ -146,7 +145,7 @@ export default function AdminPanel() {
         ))}
       </div>
 
-      {/* ─── TAB CANCHAS ─── */}
+      {/* ====─ TAB CANCHAS ==== */}
       {tab === 'canchas' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Form */}
@@ -243,7 +242,7 @@ export default function AdminPanel() {
         </div>
       )}
 
-      {/* ─── TAB PRODUCTOS ─── */}
+      {/* ====─ TAB PRODUCTOS ====─ */}
       {tab === 'productos' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1">
@@ -320,7 +319,7 @@ export default function AdminPanel() {
         </div>
       )}
 
-      {/* ─── TAB USUARIOS ─── */}
+      {/* ====─ TAB USUARIOS ====─ */}
       {tab === 'usuarios' && (
         <div>
           {loadingU ? <div className="flex justify-center py-16"><Spinner /></div> : usuarios.length === 0 ? (
@@ -360,7 +359,7 @@ export default function AdminPanel() {
         </div>
       )}
 
-      {/* ─── TAB RESERVAS ─── */}
+      {/* ====─ TAB RESERVAS ====─ */}
       {tab === 'reservas' && (
         <div>
           <div className="flex justify-between items-center mb-5 flex-wrap gap-3">

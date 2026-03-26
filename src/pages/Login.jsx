@@ -1,4 +1,3 @@
-import React from 'react'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router'
 import { toast } from 'sonner'
@@ -7,20 +6,20 @@ import { loginUser } from '../services/api'
 import { useAuth } from '../context/AuthContext'
 import { API_URL } from '../config/env'
 
-const MSG_NO_VERIFICADO = [
+const mensajeNoVerificado = [
   'debes verificar tu correo', 'verifica tu correo',
   'email no verificado', 'correo no verificado', 'verify your email',
 ]
 const esErrorDeVerificacion = (msg) =>
-  MSG_NO_VERIFICADO.some((k) => msg.toLowerCase().includes(k))
+  mensajeNoVerificado.some((mensaje) => msg.toLowerCase().includes(mensaje))
 
-export default function Login() {
+function Login() {
   const { login, isLogged } = useAuth()
-  const navigate  = useNavigate()
-  const location  = useLocation()
-  const [loading,      setLoading]      = useState(false)
-  const [form,         setForm]         = useState({ email: '', password: '' })
-  const [error,        setError]        = useState('')
+  const navigate = useNavigate()
+  const location = useLocation()
+  const [loading, setLoading] = useState(false)
+  const [form, setForm] = useState({ email: '', password: '' })
+  const [error, setError] = useState('')
   const [noVerificado, setNoVerificado] = useState(false)
 
   useEffect(() => { if (isLogged) navigate('/reservas', { replace: true }) }, [isLogged])
@@ -42,7 +41,7 @@ export default function Login() {
     } catch (err) {
       const msg = err.response?.data?.message || 'Error al iniciar sesión'
       if (esErrorDeVerificacion(msg)) setNoVerificado(true)
-      else { setError(msg); toast.error(msg) }
+      else {setError(msg)}
     } finally { setLoading(false) }
   }
 
@@ -60,7 +59,6 @@ export default function Login() {
               Canchas<span className="text-verde-400">&Deportes</span>
             </span>
           </Link>
-          <p className="section-label mb-1">Acceso al sistema</p>
           <h1 className="font-display font-black text-white uppercase text-4xl">Iniciar sesión</h1>
           <p className="text-carbon-300 text-sm mt-2">Ingresá tu cuenta para reservar canchas</p>
         </div>
@@ -125,21 +123,13 @@ export default function Login() {
           {/* Separador */}
           <div className="flex items-center gap-3 my-6">
             <div className="flex-1 h-px bg-carbon-600" />
-            <span className="font-mono text-carbon-400 text-xs uppercase tracking-widest">o</span>
+            <span className="font-mono text-carbon-400 text-xs uppercase tracking-widest">O</span>
             <div className="flex-1 h-px bg-carbon-600" />
           </div>
 
           {/* Google */}
-          <a
-            href={`${API_URL}/api/auth/google/login`}
-            className="w-full flex items-center justify-center gap-3 bg-carbon-700 border border-carbon-500 hover:border-verde-600 text-white font-body text-sm px-4 py-3 transition-all duration-200 hover:bg-carbon-600"
-          >
-            <svg width="18" height="18" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-              <path fill="#EA4335" d="M24 9.5c3.14 0 5.95 1.08 8.17 2.85l6.1-6.1C34.46 3.09 29.5 1 24 1 14.82 1 7.07 6.48 3.6 14.26l7.1 5.52C12.43 13.48 17.75 9.5 24 9.5z"/>
-              <path fill="#4285F4" d="M46.5 24.5c0-1.64-.15-3.22-.42-4.75H24v9h12.7c-.55 2.96-2.2 5.47-4.68 7.16l7.18 5.57C43.44 37.3 46.5 31.34 46.5 24.5z"/>
-              <path fill="#FBBC05" d="M10.7 28.22A14.6 14.6 0 0 1 9.5 24c0-1.47.25-2.89.7-4.22l-7.1-5.52A23.94 23.94 0 0 0 0 24c0 3.87.93 7.53 2.6 10.74l7.1-5.52z"/>
-              <path fill="#34A853" d="M24 47c5.5 0 10.12-1.82 13.5-4.95l-7.18-5.57C28.6 38.3 26.44 39 24 39c-6.25 0-11.57-3.98-13.3-9.52l-7.1 5.52C7.07 42.52 14.82 47 24 47z"/>
-            </svg>
+          <a href={`${API_URL}/api/auth/google/login`}
+            className="w-full flex items-center justify-center gap-3 bg-carbon-700 border border-carbon-500 hover:border-verde-600 text-white font-body text-sm px-4 py-3 transition-all duration-200 hover:bg-carbon-600">
             Continuar con Google
           </a>
 
@@ -156,3 +146,5 @@ export default function Login() {
     </div>
   )
 }
+
+export default Login

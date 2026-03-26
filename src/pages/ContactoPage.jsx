@@ -23,7 +23,7 @@ const CONTACT_INFO = [
   {
     icon: Phone,
     label: "Teléfono",
-    value: "+5493813657948",
+    value: "+54 9 381 365 7948",
     sub: "WhatsApp disponible",
   },
   {
@@ -264,7 +264,7 @@ export default function ContactoPage() {
                 Reservá directo sin escribirnos
               </h3>
               <Link
-                to="/reservar"
+                to="/reservas"
                 className="btn-primary inline-flex items-center gap-2 text-xs"
               >
                 Ir a reservar <ArrowRight size={14} />
@@ -420,36 +420,20 @@ export default function ContactoPage() {
         </div>
       </section>
 
-      {/* ── MAP PLACEHOLDER ───────────────────────────────── */}
+    
       <section className="border-t border-carbon-700">
         <div className="relative h-64 bg-carbon-800 overflow-hidden flex items-center justify-center">
-          {/* Field SVG bg */}
-          <svg
-            viewBox="0 0 900 300"
-            className="absolute inset-0 w-full h-full opacity-5"
-            fill="none"
-            stroke="#22c55e"
-            strokeWidth="1.5"
-          >
-            <rect x="20" y="20" width="860" height="260" />
-            <circle cx="450" cy="150" r="60" />
-            <line x1="450" y1="20" x2="450" y2="280" />
-            <rect x="20" y="95" width="70" height="110" />
-            <rect x="810" y="95" width="70" height="110" />
-            <rect x="20" y="120" width="25" height="60" />
-            <rect x="855" y="120" width="25" height="60" />
-            <circle cx="450" cy="150" r="4" fill="#22c55e" />
-          </svg>
+          
 
           <div className="relative z-10 text-center">
             <div className="inline-flex items-center gap-2 border border-carbon-600 bg-carbon-900/80 px-5 py-3 mb-2">
               <MapPin size={14} className="text-verde-500" />
               <span className="font-display font-700 text-white uppercase text-sm tracking-widest">
-                Av. Siempreviva 742, Springfield
+                General Paz 576
               </span>
             </div>
-            <p className="text-carbon-400 text-xs font-mono">
-              A 5 minutos del centro · Estacionamiento disponible
+            <p className="text-green-400 text-xs font-mono">
+              A 5 minutos del centro · Con Estacionamiento
             </p>
           </div>
         </div>

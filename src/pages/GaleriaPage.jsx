@@ -2,8 +2,10 @@ import { useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, X, ChevronLeft, ChevronRight, ZoomIn, Image } from 'lucide-react'
 
-/* ─── Data ─────────────────────────────────────────────── */
 const CATEGORIAS = ['Todas', 'Canchas', 'Instalaciones', 'Eventos', 'Nocturnas']
+
+
+// imagenes hardcodeadas 
 
 const FOTOS = [
   {

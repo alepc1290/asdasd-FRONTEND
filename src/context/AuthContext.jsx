@@ -1,9 +1,8 @@
-import React from 'react'
 import { createContext, useContext, useState } from 'react'
 
 const AuthContext = createContext(null)
 
-export function AuthProvider({ children }) {
+function AuthProvider({ children }) {
   const [auth, setAuth] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem('auth')) || null
@@ -33,6 +32,11 @@ export function AuthProvider({ children }) {
   )
 }
 
-export function useAuth() {
+function useAuth() {
   return useContext(AuthContext)
+}
+
+export {
+  AuthProvider,
+  useAuth
 }

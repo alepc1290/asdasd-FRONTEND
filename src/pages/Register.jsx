@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 import { UserPlus, Zap, CheckCircle, Mail } from 'lucide-react'
 import { registerUser } from '../services/api'
 import { useAuth } from '../context/AuthContext'
+import logo from "../components/img/LogoImagen.png"
 
 export default function Register() {
   const { isLogged } = useAuth()
@@ -69,14 +70,14 @@ export default function Register() {
 
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2 mb-6">
-            <span className="w-10 h-10 bg-verde-500 flex items-center justify-center">
-              <Zap size={20} className="text-carbon-900" fill="currentColor" />
-            </span>
-            <span className="font-display font-black text-white uppercase text-xl tracking-wider">
-              Canchas<span className="text-verde-400">&Deportes</span>
-            </span>
-          </Link>
-          <p className="section-label mb-1">Nueva cuenta</p>
+                      <span className="w-auto h-6 flex items-center justify-center">
+                        <img
+                                    src={logo}
+                                    alt="RC Sport Logo"
+                                    className="h-12 w-auto "
+                                  />
+                      </span>
+                    </Link>
           <h1 className="font-display font-black text-white uppercase text-4xl">Registrarse</h1>
           <p className="text-carbon-300 text-sm mt-2">Registrate gratis y empezá a reservar</p>
         </div>

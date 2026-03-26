@@ -5,6 +5,7 @@ import { LogIn, Zap } from 'lucide-react'
 import { loginUser } from '../services/api'
 import { useAuth } from '../context/AuthContext'
 import { API_URL } from '../config/env'
+import logo from "../components/img/LogoImagen.png"
 
 const mensajeNoVerificado = [
   'debes verificar tu correo', 'verifica tu correo',
@@ -52,11 +53,12 @@ function Login() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2 mb-6">
-            <span className="w-10 h-10 bg-verde-500 flex items-center justify-center">
-              <Zap size={20} className="text-carbon-900" fill="currentColor" />
-            </span>
-            <span className="font-display font-black text-white uppercase text-xl tracking-wider">
-              Canchas<span className="text-verde-400">&Deportes</span>
+            <span className="w-auto h-6 flex items-center justify-center">
+              <img
+                          src={logo}
+                          alt="RC Sport Logo"
+                          className="h-12 w-auto "
+                        />
             </span>
           </Link>
           <h1 className="font-display font-black text-white uppercase text-4xl">Iniciar sesión</h1>

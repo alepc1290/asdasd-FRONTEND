@@ -4,6 +4,7 @@ import { ArrowRight, Zap, Clock, Shield, Star } from "lucide-react";
 import { getCanchas, getProductos } from "../services/api";
 import CanchaCard from "../components/CanchaCard";
 import ProductoCard from "../components/ProductoCard";
+import Carousel from "../components/Carousel";
 
 const CARACTERISTICAS = [
   {
@@ -182,26 +183,8 @@ export default function Home() {
           </div>
         )}
       </section>
-
+      <Carousel/>
       {/* ── CTA BANNER ── */}
-      <section className="bg-verde-600 py-16">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <p className="font-mono text-black-900/70 text-xs uppercase tracking-widest mb-3">
-            ¿Listo para jugar?
-          </p>
-          <h2 className="font-display font-black text-carbon-900 text-5xl md:text-6xl uppercase leading-none mb-6">
-            Reservá tu turno
-            <br />
-            en menos de 2 minutos
-          </h2>
-          <Link
-            to="/reservas"
-            className="inline-flex items-center gap-2 bg-carbon-900 text-white font-display font-bold uppercase tracking-widest px-8 py-4 text-sm hover:bg-carbon-700 transition-colors"
-          >
-            Empezar ahora <ArrowRight size={16} />
-          </Link>
-        </div>
-      </section>
 
       {/* ── PRODUCTOS ── */}
       {productos.length > 0 && (

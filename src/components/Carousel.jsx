@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { ArrowLeft, ArrowRight, Zap, Clock, Shield, Star, Users, Trophy } from 'lucide-react'
+import publi1 from "./img/publi1.png"
+import publi2 from "./img/publi2.png"
+import publi3 from "./img/publi3.png"
 
 /* ─────────────────────────────────────────────
    Demo slides — reemplazá con tus datos reales
@@ -14,7 +17,7 @@ const SLIDES = [
     stat: { num: '4.9', label: 'Rating promedio' },
     badge: 'disponible',
     icon: Star,
-    image: 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=900&q=80',
+    image: 'https://res.cloudinary.com/proyecto3/image/upload/v1774500595/Cartel_Cancha_de_Futbol_Llamativo_Amarillo_y_Verde_c911ul.png',
   },
   {
     id: 2,
@@ -25,7 +28,7 @@ const SLIDES = [
     stat: { num: '500+', label: 'Reservas / mes' },
     badge: 'nuevo',
     icon: Shield,
-    image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=900&q=80',
+    image: 'https://res.cloudinary.com/proyecto3/image/upload/v1774502076/Post_para_Instagram_promocion_cancha_de_futbol_minimalista_moderno_simple_ver_y_blanco_h1f3h9.png',
   },
   {
     id: 3,
@@ -36,7 +39,7 @@ const SLIDES = [
     stat: { num: '15 hs', label: 'Disponibles / día' },
     badge: 'disponible',
     icon: Clock,
-    image: 'https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=900&q=80',
+    image: 'https://res.cloudinary.com/proyecto3/image/upload/v1774500555/cld-sample-3.jpg',
   },
   {
     id: 4,

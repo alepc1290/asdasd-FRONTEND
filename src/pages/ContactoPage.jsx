@@ -140,7 +140,7 @@ function validate(fields) {
 }
 
 /* ─── Page ──────────────────────────────────────────────── */
-export default function ContactoPage() {
+function ContactoPage() {
   const [fields, setFields] = useState(INITIAL);
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
@@ -441,3 +441,5 @@ export default function ContactoPage() {
     </>
   );
 }
+
+export default ContactoPage

@@ -29,7 +29,7 @@ const CARACTERISTICAS = [
   },
 ];
 
-export default function Home() {
+function Home() {
   const [canchas, setCanchas] = useState([]);
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -218,3 +218,5 @@ export default function Home() {
     </>
   );
 }
+
+export default Home

@@ -6,7 +6,7 @@ import { jwtDecode } from 'jwt-decode'
 import { Zap } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
-export default function GoogleAuthSuccess() {
+function GoogleAuthSuccess() {
   const [searchParams] = useSearchParams()
   const { login, isLogged } = useAuth()
   const navigate  = useNavigate()
@@ -50,3 +50,5 @@ export default function GoogleAuthSuccess() {
     </div>
   )
 }
+
+export default GoogleAuthSuccess

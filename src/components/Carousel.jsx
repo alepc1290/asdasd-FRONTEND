@@ -1,12 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { ArrowLeft, ArrowRight, Zap, Clock, Shield, Star, Users, Trophy } from 'lucide-react'
-import publi1 from "./img/publi1.png"
-import publi2 from "./img/publi2.png"
-import publi3 from "./img/publi3.png"
-
-/* ─────────────────────────────────────────────
-   Demo slides — reemplazá con tus datos reales
-───────────────────────────────────────────── */
+// asdasd
 const SLIDES = [
   {
     id: 1,
@@ -60,13 +54,10 @@ const BADGE_STYLES = {
   popular:    'bg-yellow-400 text-carbon-900',
 }
 
-/* ─────────────────────────────────────────────
-   Carousel Component
-───────────────────────────────────────────── */
-export default function Carousel() {
+function Carousel() {
   const [current, setCurrent] = useState(0)
   const [animating, setAnimating] = useState(false)
-  const [direction, setDirection] = useState('next') // 'next' | 'prev'
+  const [direction, setDirection] = useState('next')
   const autoplayRef = useRef(null)
   const total = SLIDES.length
 
@@ -225,3 +216,5 @@ export default function Carousel() {
     </section>
   )
 }
+
+export default Carousel

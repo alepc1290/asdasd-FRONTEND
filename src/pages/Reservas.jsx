@@ -12,7 +12,7 @@ import InstruccionesPago, { EstadoPagoBadge } from '../components/InstruccionesP
 
 const DURACIONES = [1, 2, 3]
 
-export default function Reservas() {
+function Reservas() {
   const { auth } = useAuth()
   const location = useLocation()
   const [canchas, setCanchas] = useState([])
@@ -452,3 +452,5 @@ export default function Reservas() {
     </div>
   )
 }
+
+export default Reservas

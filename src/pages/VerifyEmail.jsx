@@ -6,7 +6,7 @@ import { verificarEmail } from '../services/api'
 
 const ESTADO = { CARGANDO: 'cargando', EXITO: 'exito', ERROR: 'error', SIN_TOKEN: 'sin_token' }
 
-export default function VerifyEmail() {
+function VerifyEmail() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const [estado,   setEstado]   = useState(ESTADO.CARGANDO)
@@ -105,3 +105,6 @@ export default function VerifyEmail() {
     </Wrapper>
   )
 }
+
+
+export default VerifyEmail

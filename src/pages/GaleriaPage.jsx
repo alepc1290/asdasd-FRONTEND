@@ -246,7 +246,7 @@ function FotoCard({ foto, onOpen, index }) {
 }
 
 /* ─── Page ──────────────────────────────────────────────── */
-export default function GaleriaPage() {
+function GaleriaPage() {
   const [categoriaActiva, setCategoriaActiva] = useState('Todas')
   const [lightbox, setLightbox] = useState(null)
 
@@ -396,3 +396,5 @@ export default function GaleriaPage() {
     </>
   )
 }
+
+export default GaleriaPage

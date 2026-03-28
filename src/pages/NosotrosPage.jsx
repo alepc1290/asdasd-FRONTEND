@@ -96,7 +96,7 @@ function StatItem({ num, label }) {
 }
 
 /* ─── Page ──────────────────────────────────────────────── */
-export default function NosotrosPage() {
+function NosotrosPage() {
   return (
     <>
       {/* ── HERO ─────────────────────────────────────────── */}
@@ -314,3 +314,5 @@ export default function NosotrosPage() {
     </>
   );
 }
+
+export default NosotrosPage

@@ -1,9 +1,8 @@
-import React from 'react'
 import { Link } from 'react-router'
 import { Zap, MapPin, Phone, Mail } from 'lucide-react'
 import logo from "./img/LogoImagen.png"
 
-export default function Footer() {
+function Footer() {
   return (
     <footer className="bg-carbon-800 border-t border-carbon-700 mt-20">
       <div className="max-w-6xl mx-auto px-4 py-12">
@@ -74,3 +73,5 @@ export default function Footer() {
     </footer>
   )
 }
+
+export default Footer

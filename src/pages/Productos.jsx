@@ -1,10 +1,9 @@
-import React from 'react'
 import { useEffect, useState } from 'react'
 import { Search, X } from 'lucide-react'
 import { getProductos } from '../services/api'
 import ProductoCard from '../components/ProductoCard'
 
-export default function Productos() {
+function Productos() {
   const [productos, setProductos] = useState([])
   const [loading,   setLoading]   = useState(true)
   const [busqueda,  setBusqueda]  = useState('')
@@ -93,3 +92,5 @@ export default function Productos() {
     </div>
   )
 }
+
+export default Productos

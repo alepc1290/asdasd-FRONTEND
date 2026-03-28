@@ -9,7 +9,7 @@ import {
 } from '../services/api'
 import { EstadoPagoBadge } from '../components/InstruccionesPago'
 
-const CANCHA_VACIA   = { nombre: '', tipo: 'futbol5', precio: '', descripcion: '', imagen: '', estado: 'disponible' }
+const CANCHA_VACIA = { nombre: '', tipo: 'futbol5', precio: '', descripcion: '', imagen: '', estado: 'disponible' }
 const PRODUCTO_VACIO = { nombre: '', precio: '', stock: '', descripcion: '', imagen: '' }
 
 const TABS = ['canchas', 'productos', 'usuarios', 'reservas']
@@ -25,35 +25,35 @@ function FieldLabel({ children }) {
 export default function AdminPanel() {
   const [tab, setTab] = useState('canchas')
 
-  const [canchas,      setCanchas]      = useState([])
-  const [loadingC,     setLoadingC]     = useState(true)
-  const [formCancha,   setFormCancha]   = useState(CANCHA_VACIA)
-  const [editandoC,    setEditandoC]    = useState(null)
-  const [submittingC,  setSubmittingC]  = useState(false)
+  const [canchas, setCanchas] = useState([])
+  const [loadingC, setLoadingC] = useState(true)
+  const [formCancha, setFormCancha] = useState(CANCHA_VACIA)
+  const [editandoC, setEditandoC] = useState(null)
+  const [submittingC, setSubmittingC] = useState(false)
 
-  const [productos,    setProductos]    = useState([])
-  const [loadingP,     setLoadingP]     = useState(true)
+  const [productos, setProductos] = useState([])
+  const [loadingP, setLoadingP] = useState(true)
   const [formProducto, setFormProducto] = useState(PRODUCTO_VACIO)
-  const [editandoP,    setEditandoP]    = useState(null)
-  const [submittingP,  setSubmittingP]  = useState(false)
+  const [editandoP, setEditandoP] = useState(null)
+  const [submittingP, setSubmittingP] = useState(false)
 
-  const [usuarios,  setUsuarios]  = useState([])
-  const [loadingU,  setLoadingU]  = useState(true)
+  const [usuarios, setUsuarios] = useState([])
+  const [loadingU, setLoadingU] = useState(true)
 
   const [reservasAdmin, setReservasAdmin] = useState([])
-  const [loadingR,      setLoadingR]      = useState(true)
+  const [loadingR, setLoadingR] = useState(true)
 
   useEffect(() => { fetchCanchas(); fetchProductos(); fetchUsuarios(); fetchReservasAdmin() }, [])
 
-  const fetchCanchas       = () => { setLoadingC(true);  getCanchas().then(r => setCanchas(r.data.data)).catch(console.error).finally(() => setLoadingC(false)) }
-  const fetchProductos     = () => { setLoadingP(true); getProductos().then(r => setProductos(r.data.data)).catch(console.error).finally(() => setLoadingP(false)) }
-  const fetchUsuarios      = () => { setLoadingU(true); getUsers().then(r => setUsuarios(r.data.data)).catch(console.error).finally(() => setLoadingU(false)) }
+  const fetchCanchas = () => { setLoadingC(true); getCanchas().then(r => setCanchas(r.data.data)).catch(console.error).finally(() => setLoadingC(false)) }
+  const fetchProductos = () => { setLoadingP(true); getProductos().then(r => setProductos(r.data.data)).catch(console.error).finally(() => setLoadingP(false)) }
+  const fetchUsuarios = () => { setLoadingU(true); getUsers().then(r => setUsuarios(r.data.data)).catch(console.error).finally(() => setLoadingU(false)) }
   const fetchReservasAdmin = () => { setLoadingR(true); getReservasAdmin().then(r => setReservasAdmin(r.data.reservas)).catch(console.error).finally(() => setLoadingR(false)) }
 
   // ==== Canchas ====
-  const handleChangeC    = (e) => setFormCancha({ ...formCancha, [e.target.name]: e.target.value })
+  const handleChangeC = (e) => setFormCancha({ ...formCancha, [e.target.name]: e.target.value })
   const handleEditCancha = (c) => { setEditandoC(c._id); setFormCancha({ nombre: c.nombre, tipo: c.tipo, precio: c.precio, descripcion: c.descripcion || '', imagen: c.imagen || '', estado: c.estado }) }
-  const cancelarEditC    = () => { setEditandoC(null); setFormCancha(CANCHA_VACIA) }
+  const cancelarEditC = () => { setEditandoC(null); setFormCancha(CANCHA_VACIA) }
 
   const handleSubmitCancha = async (e) => {
     e.preventDefault()
@@ -61,7 +61,7 @@ export default function AdminPanel() {
     setSubmittingC(true)
     try {
       if (editandoC) { await updateCancha(editandoC, formCancha); toast.success('Cancha actualizada') }
-      else           { await createCancha(formCancha); toast.success('Cancha creada') }
+      else { await createCancha(formCancha); toast.success('Cancha creada') }
       cancelarEditC(); fetchCanchas()
     } catch (err) { toast.error(err.response?.data?.message || 'Error') }
     finally { setSubmittingC(false) }
@@ -74,9 +74,9 @@ export default function AdminPanel() {
   }
 
   // ==== Productos ====
-  const handleChangeP      = (e) => setFormProducto({ ...formProducto, [e.target.name]: e.target.value })
+  const handleChangeP = (e) => setFormProducto({ ...formProducto, [e.target.name]: e.target.value })
   const handleEditProducto = (p) => { setEditandoP(p._id); setFormProducto({ nombre: p.nombre, precio: p.precio, stock: p.stock, descripcion: p.descripcion || '', imagen: p.imagen || '' }) }
-  const cancelarEditP      = () => { setEditandoP(null); setFormProducto(PRODUCTO_VACIO) }
+  const cancelarEditP = () => { setEditandoP(null); setFormProducto(PRODUCTO_VACIO) }
 
   const handleSubmitProducto = async (e) => {
     e.preventDefault()
@@ -84,7 +84,7 @@ export default function AdminPanel() {
     setSubmittingP(true)
     try {
       if (editandoP) { await updateProducto(editandoP, formProducto); toast.success('Producto actualizado') }
-      else           { await createProducto(formProducto); toast.success('Producto creado') }
+      else { await createProducto(formProducto); toast.success('Producto creado') }
       cancelarEditP(); fetchProductos()
     } catch (err) { toast.error(err.response?.data?.message || 'Error') }
     finally { setSubmittingP(false) }
@@ -134,18 +134,17 @@ export default function AdminPanel() {
           <button
             key={t}
             onClick={() => setTab(t)}
-            className={`px-5 py-3 font-display font-bold uppercase tracking-widest text-xs whitespace-nowrap transition-all border-b-2 -mb-px ${
-              tab === t
-                ? 'text-verde-400 border-verde-500'
-                : 'text-carbon-400 border-transparent hover:text-white'
-            }`}
+            className={`px-5 py-3 font-display font-bold uppercase tracking-widest text-xs whitespace-nowrap transition-all border-b-2 -mb-px ${tab === t
+              ? 'text-verde-400 border-verde-500'
+              : 'text-carbon-400 border-transparent hover:text-white'
+              }`}
           >
             {t}
           </button>
         ))}
       </div>
 
-      {/* ====─ TAB CANCHAS ==== */}
+      {/* ==== TAB CANCHAS ==== */}
       {tab === 'canchas' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Form */}
@@ -160,8 +159,10 @@ export default function AdminPanel() {
                 </FormField>
                 <FormField label="Tipo">
                   <select name="tipo" className="input-field" value={formCancha.tipo} onChange={handleChangeC}>
+                    <option value="futbolSala">Fútbol sala</option>
                     <option value="futbol5">Fútbol 5</option>
                     <option value="futbol7">Fútbol 7</option>
+                    <option value="futbol11">Fútbol 11</option>
                   </select>
                 </FormField>
                 <FormField label="Precio / hora">
@@ -219,7 +220,7 @@ export default function AdminPanel() {
                           <p className="font-display font-bold text-white uppercase text-sm">{c.nombre}</p>
                           <p className="text-carbon-400 text-xs">{c.descripcion}</p>
                         </td>
-                        <td className="px-4 py-3"><span className="badge-success">{c.tipo === 'futbol5' ? 'F5' : 'F7'}</span></td>
+                        <td className="px-4 py-3"><span className="badge-success">{c.tipo === 'futbol5'? 'F5': c.tipo === 'futbol7'? 'F7': c.tipo === 'futbolSala'? 'FutSal': 'F11'}</span></td>
                         <td className="px-4 py-3 font-mono text-verde-400 font-bold">${c.precio?.toLocaleString()}</td>
                         <td className="px-4 py-3">
                           <span className={c.estado === 'disponible' ? 'badge-success' : c.estado === 'mantenimiento' ? 'badge-warning' : 'badge-danger'}>
@@ -287,7 +288,7 @@ export default function AdminPanel() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-carbon-600">
-                      {['Producto','Precio','Stock',''].map((h) => (
+                      {['Producto', 'Precio', 'Stock', ''].map((h) => (
                         <th key={h} className="text-left px-4 py-3 font-mono text-xs text-carbon-400 uppercase tracking-widest">{h}</th>
                       ))}
                     </tr>
@@ -329,7 +330,7 @@ export default function AdminPanel() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-carbon-600">
-                    {['Nombre','Email','Rol','Registro',''].map((h) => (
+                    {['Nombre', 'Email', 'Rol', 'Registro', ''].map((h) => (
                       <th key={h} className="text-left px-4 py-3 font-mono text-xs text-carbon-400 uppercase tracking-widest">{h}</th>
                     ))}
                   </tr>
@@ -378,7 +379,7 @@ export default function AdminPanel() {
               <table className="w-full text-sm min-w-[700px]">
                 <thead>
                   <tr className="border-b border-carbon-600">
-                    {['Usuario','Cancha','Fecha','Horario','Estado','Acciones'].map((h) => (
+                    {['Usuario', 'Cancha', 'Fecha', 'Horario', 'Estado', 'Acciones'].map((h) => (
                       <th key={h} className="text-left px-4 py-3 font-mono text-xs text-carbon-400 uppercase tracking-widest">{h}</th>
                     ))}
                   </tr>
@@ -386,8 +387,8 @@ export default function AdminPanel() {
                 <tbody className="divide-y divide-carbon-700">
                   {reservasAdmin.map((r) => {
                     const estadoPago = r.estadoPago || 'pendiente'
-                    const horas  = parseInt(r.horaFin) - parseInt(r.horaInicio)
-                    const total  = r.precio * horas
+                    const horas = parseInt(r.horaFin) - parseInt(r.horaInicio)
+                    const total = r.precio * horas
                     return (
                       <tr key={r._id} className="hover:bg-carbon-700/50 transition-colors">
                         <td className="px-4 py-3">
@@ -399,7 +400,7 @@ export default function AdminPanel() {
                           <p className="font-mono text-carbon-400 text-xs">${r.precio?.toLocaleString()}/h</p>
                         </td>
                         <td className="px-4 py-3 font-mono text-carbon-300 text-xs">
-                          {new Date(r.fecha + 'T12:00:00').toLocaleDateString('es-AR', { weekday:'short', day:'numeric', month:'short' })}
+                          {new Date(r.fecha + 'T12:00:00').toLocaleDateString('es-AR', { weekday: 'short', day: 'numeric', month: 'short' })}
                         </td>
                         <td className="px-4 py-3">
                           <p className="font-mono text-white text-xs">{r.horaInicio} – {r.horaFin} hs</p>

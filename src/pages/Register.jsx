@@ -7,7 +7,7 @@ import { registerUser } from '../services/api'
 import { useAuth } from '../context/AuthContext'
 import logo from "../components/img/LogoImagen.png"
 
-export default function Register() {
+function Register() {
   const { isLogged } = useAuth()
   const navigate = useNavigate()
   const [loading,    setLoading]    = useState(false)
@@ -136,3 +136,5 @@ export default function Register() {
     </div>
   )
 }
+
+export default Register

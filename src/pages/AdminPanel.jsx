@@ -9,7 +9,8 @@ import {
 } from '../services/api'
 import { EstadoPagoBadge } from '../components/InstruccionesPago'
 
-const CANCHA_VACIA = { nombre: '', tipo: 'futbol5', precio: '', descripcion: '', imagen: '', estado: 'disponible' }
+// ── FIX 1: CANCHA_VACIA declarada una sola vez ──
+const CANCHA_VACIA  = { nombre: '', tipo: 'futbol5', precio: '', descripcion: '', imagen: '', estado: 'disponible' }
 const PRODUCTO_VACIO = { nombre: '', precio: '', stock: '', descripcion: '', imagen: '' }
 
 const TABS = ['canchas', 'productos', 'usuarios', 'reservas']
@@ -22,38 +23,43 @@ function FieldLabel({ children }) {
   return <label className="font-mono text-xs text-carbon-400 uppercase tracking-widest block mb-1.5">{children}</label>
 }
 
+function FormField({ label, children }) {
+  return <div><FieldLabel>{label}</FieldLabel>{children}</div>
+}
+
 export default function AdminPanel() {
   const [tab, setTab] = useState('canchas')
 
-  const [canchas, setCanchas] = useState([])
-  const [loadingC, setLoadingC] = useState(true)
-  const [formCancha, setFormCancha] = useState(CANCHA_VACIA)
-  const [editandoC, setEditandoC] = useState(null)
+  const [canchas, setCanchas]         = useState([])
+  const [loadingC, setLoadingC]       = useState(true)
+  const [formCancha, setFormCancha]   = useState(CANCHA_VACIA)
+  const [editandoC, setEditandoC]     = useState(null)
   const [submittingC, setSubmittingC] = useState(false)
 
-  const [productos, setProductos] = useState([])
-  const [loadingP, setLoadingP] = useState(true)
+  const [productos, setProductos]       = useState([])
+  const [loadingP, setLoadingP]         = useState(true)
   const [formProducto, setFormProducto] = useState(PRODUCTO_VACIO)
-  const [editandoP, setEditandoP] = useState(null)
-  const [submittingP, setSubmittingP] = useState(false)
+  const [editandoP, setEditandoP]       = useState(null)
+  // ── FIX 2: submittingP faltaba ──
+  const [submittingP, setSubmittingP]   = useState(false)
 
-  const [usuarios, setUsuarios] = useState([])
-  const [loadingU, setLoadingU] = useState(true)
+  const [usuarios, setUsuarios]   = useState([])
+  const [loadingU, setLoadingU]   = useState(true)
 
   const [reservasAdmin, setReservasAdmin] = useState([])
-  const [loadingR, setLoadingR] = useState(true)
+  const [loadingR, setLoadingR]           = useState(true)
 
   useEffect(() => { fetchCanchas(); fetchProductos(); fetchUsuarios(); fetchReservasAdmin() }, [])
 
-  const fetchCanchas = () => { setLoadingC(true); getCanchas().then(r => setCanchas(r.data.data)).catch(console.error).finally(() => setLoadingC(false)) }
-  const fetchProductos = () => { setLoadingP(true); getProductos().then(r => setProductos(r.data.data)).catch(console.error).finally(() => setLoadingP(false)) }
-  const fetchUsuarios = () => { setLoadingU(true); getUsers().then(r => setUsuarios(r.data.data)).catch(console.error).finally(() => setLoadingU(false)) }
+  const fetchCanchas       = () => { setLoadingC(true); getCanchas().then(r => setCanchas(r.data.data)).catch(console.error).finally(() => setLoadingC(false)) }
+  const fetchProductos     = () => { setLoadingP(true); getProductos().then(r => setProductos(r.data.data)).catch(console.error).finally(() => setLoadingP(false)) }
+  const fetchUsuarios      = () => { setLoadingU(true); getUsers().then(r => setUsuarios(r.data.data)).catch(console.error).finally(() => setLoadingU(false)) }
   const fetchReservasAdmin = () => { setLoadingR(true); getReservasAdmin().then(r => setReservasAdmin(r.data.reservas)).catch(console.error).finally(() => setLoadingR(false)) }
 
   // ==== Canchas ====
-  const handleChangeC = (e) => setFormCancha({ ...formCancha, [e.target.name]: e.target.value })
+  const handleChangeC    = (e) => setFormCancha({ ...formCancha, [e.target.name]: e.target.value })
   const handleEditCancha = (c) => { setEditandoC(c._id); setFormCancha({ nombre: c.nombre, tipo: c.tipo, precio: c.precio, descripcion: c.descripcion || '', imagen: c.imagen || '', estado: c.estado }) }
-  const cancelarEditC = () => { setEditandoC(null); setFormCancha(CANCHA_VACIA) }
+  const cancelarEditC    = () => { setEditandoC(null); setFormCancha(CANCHA_VACIA) }
 
   const handleSubmitCancha = async (e) => {
     e.preventDefault()
@@ -61,7 +67,7 @@ export default function AdminPanel() {
     setSubmittingC(true)
     try {
       if (editandoC) { await updateCancha(editandoC, formCancha); toast.success('Cancha actualizada') }
-      else { await createCancha(formCancha); toast.success('Cancha creada') }
+      else           { await createCancha(formCancha);            toast.success('Cancha creada') }
       cancelarEditC(); fetchCanchas()
     } catch (err) { toast.error(err.response?.data?.message || 'Error') }
     finally { setSubmittingC(false) }
@@ -74,9 +80,9 @@ export default function AdminPanel() {
   }
 
   // ==== Productos ====
-  const handleChangeP = (e) => setFormProducto({ ...formProducto, [e.target.name]: e.target.value })
+  const handleChangeP      = (e) => setFormProducto({ ...formProducto, [e.target.name]: e.target.value })
   const handleEditProducto = (p) => { setEditandoP(p._id); setFormProducto({ nombre: p.nombre, precio: p.precio, stock: p.stock, descripcion: p.descripcion || '', imagen: p.imagen || '' }) }
-  const cancelarEditP = () => { setEditandoP(null); setFormProducto(PRODUCTO_VACIO) }
+  const cancelarEditP      = () => { setEditandoP(null); setFormProducto(PRODUCTO_VACIO) }
 
   const handleSubmitProducto = async (e) => {
     e.preventDefault()
@@ -84,7 +90,7 @@ export default function AdminPanel() {
     setSubmittingP(true)
     try {
       if (editandoP) { await updateProducto(editandoP, formProducto); toast.success('Producto actualizado') }
-      else { await createProducto(formProducto); toast.success('Producto creado') }
+      else           { await createProducto(formProducto);             toast.success('Producto creado') }
       cancelarEditP(); fetchProductos()
     } catch (err) { toast.error(err.response?.data?.message || 'Error') }
     finally { setSubmittingP(false) }
@@ -114,10 +120,6 @@ export default function AdminPanel() {
     catch (err) { toast.error(err.response?.data?.message || 'Error') }
   }
 
-  const FormField = ({ label, children }) => (
-    <div><FieldLabel>{label}</FieldLabel>{children}</div>
-  )
-
   return (
     <div className="max-w-7xl mx-auto px-4 py-16">
       {/* Header */}
@@ -134,10 +136,9 @@ export default function AdminPanel() {
           <button
             key={t}
             onClick={() => setTab(t)}
-            className={`px-5 py-3 font-display font-bold uppercase tracking-widest text-xs whitespace-nowrap transition-all border-b-2 -mb-px ${tab === t
-              ? 'text-verde-400 border-verde-500'
-              : 'text-carbon-400 border-transparent hover:text-white'
-              }`}
+            className={`px-5 py-3 font-display font-bold uppercase tracking-widest text-xs whitespace-nowrap transition-all border-b-2 -mb-px ${
+              tab === t ? 'text-verde-400 border-verde-500' : 'text-carbon-400 border-transparent hover:text-white'
+            }`}
           >
             {t}
           </button>
@@ -147,11 +148,12 @@ export default function AdminPanel() {
       {/* ==== TAB CANCHAS ==== */}
       {tab === 'canchas' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Form */}
           <div className="lg:col-span-1">
             <div className="bg-carbon-800 border border-carbon-600 p-6">
               <h3 className="font-display font-bold text-white uppercase tracking-wide text-sm mb-5 flex items-center gap-2">
-                {editandoC ? <><Pencil size={14} className="text-verde-500" /> Editar cancha</> : <><Plus size={14} className="text-verde-500" /> Nueva cancha</>}
+                {editandoC
+                  ? <><Pencil size={14} className="text-verde-500" /> Editar cancha</>
+                  : <><Plus   size={14} className="text-verde-500" /> Nueva cancha</>}
               </h3>
               <form onSubmit={handleSubmitCancha} className="space-y-4">
                 <FormField label="Nombre">
@@ -183,7 +185,9 @@ export default function AdminPanel() {
                 </FormField>
                 <div className="flex gap-2 pt-1">
                   <button type="submit" className="btn-primary flex-1 flex items-center justify-center gap-2 text-xs py-2" disabled={submittingC}>
-                    {submittingC ? <div className="w-4 h-4 border-2 border-carbon-900/40 border-t-carbon-900 rounded-full animate-spin" /> : editandoC ? 'Actualizar' : 'Crear cancha'}
+                    {submittingC
+                      ? <div className="w-4 h-4 border-2 border-carbon-900/40 border-t-carbon-900 rounded-full animate-spin" />
+                      : editandoC ? 'Actualizar' : 'Crear cancha'}
                   </button>
                   {editandoC && (
                     <button type="button" onClick={cancelarEditC} className="btn-outline px-3 py-2 text-xs">
@@ -195,9 +199,10 @@ export default function AdminPanel() {
             </div>
           </div>
 
-          {/* Table */}
           <div className="lg:col-span-2">
-            {loadingC ? <div className="flex justify-center py-16"><Spinner /></div> : canchas.length === 0 ? (
+            {loadingC ? (
+              <div className="flex justify-center py-16"><Spinner /></div>
+            ) : canchas.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 gap-3 bg-carbon-800 border border-carbon-600">
                 <p className="text-carbon-400 text-sm">No hay canchas todavía</p>
               </div>
@@ -206,11 +211,9 @@ export default function AdminPanel() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-carbon-600">
-                      <th className="text-left px-4 py-3 font-mono text-xs text-carbon-400 uppercase tracking-widest">Cancha</th>
-                      <th className="text-left px-4 py-3 font-mono text-xs text-carbon-400 uppercase tracking-widest">Tipo</th>
-                      <th className="text-left px-4 py-3 font-mono text-xs text-carbon-400 uppercase tracking-widest">Precio</th>
-                      <th className="text-left px-4 py-3 font-mono text-xs text-carbon-400 uppercase tracking-widest">Estado</th>
-                      <th className="px-4 py-3" />
+                      {['Cancha', 'Tipo', 'Precio', 'Estado', ''].map((h) => (
+                        <th key={h} className="text-left px-4 py-3 font-mono text-xs text-carbon-400 uppercase tracking-widest">{h}</th>
+                      ))}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-carbon-700">
@@ -220,7 +223,11 @@ export default function AdminPanel() {
                           <p className="font-display font-bold text-white uppercase text-sm">{c.nombre}</p>
                           <p className="text-carbon-400 text-xs">{c.descripcion}</p>
                         </td>
-                        <td className="px-4 py-3"><span className="badge-success">{c.tipo === 'futbol5'? 'F5': c.tipo === 'futbol7'? 'F7': c.tipo === 'futbolSala'? 'FutSal': 'F11'}</span></td>
+                        <td className="px-4 py-3">
+                          <span className="badge-success">
+                            {c.tipo === 'futbol5' ? 'F5' : c.tipo === 'futbol7' ? 'F7' : c.tipo === 'futbolSala' ? 'FutSal' : 'F11'}
+                          </span>
+                        </td>
                         <td className="px-4 py-3 font-mono text-verde-400 font-bold">${c.precio?.toLocaleString()}</td>
                         <td className="px-4 py-3">
                           <span className={c.estado === 'disponible' ? 'badge-success' : c.estado === 'mantenimiento' ? 'badge-warning' : 'badge-danger'}>
@@ -243,13 +250,15 @@ export default function AdminPanel() {
         </div>
       )}
 
-      {/* ====─ TAB PRODUCTOS ====─ */}
+      {/* ==== TAB PRODUCTOS ==== */}
       {tab === 'productos' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1">
             <div className="bg-carbon-800 border border-carbon-600 p-6">
               <h3 className="font-display font-bold text-white uppercase tracking-wide text-sm mb-5 flex items-center gap-2">
-                {editandoP ? <><Pencil size={14} className="text-verde-500" /> Editar producto</> : <><Plus size={14} className="text-verde-500" /> Nuevo producto</>}
+                {editandoP
+                  ? <><Pencil size={14} className="text-verde-500" /> Editar producto</>
+                  : <><Plus   size={14} className="text-verde-500" /> Nuevo producto</>}
               </h3>
               <form onSubmit={handleSubmitProducto} className="space-y-4">
                 <FormField label="Nombre">
@@ -269,7 +278,9 @@ export default function AdminPanel() {
                 </FormField>
                 <div className="flex gap-2 pt-1">
                   <button type="submit" className="btn-primary flex-1 flex items-center justify-center gap-2 text-xs py-2" disabled={submittingP}>
-                    {submittingP ? <div className="w-4 h-4 border-2 border-carbon-900/40 border-t-carbon-900 rounded-full animate-spin" /> : editandoP ? 'Actualizar' : 'Crear producto'}
+                    {submittingP
+                      ? <div className="w-4 h-4 border-2 border-carbon-900/40 border-t-carbon-900 rounded-full animate-spin" />
+                      : editandoP ? 'Actualizar' : 'Crear producto'}
                   </button>
                   {editandoP && (
                     <button type="button" onClick={cancelarEditP} className="btn-outline px-3 py-2 text-xs"><X size={14} /></button>
@@ -278,8 +289,11 @@ export default function AdminPanel() {
               </form>
             </div>
           </div>
+
           <div className="lg:col-span-2">
-            {loadingP ? <div className="flex justify-center py-16"><Spinner /></div> : productos.length === 0 ? (
+            {loadingP ? (
+              <div className="flex justify-center py-16"><Spinner /></div>
+            ) : productos.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 gap-3 bg-carbon-800 border border-carbon-600">
                 <p className="text-carbon-400 text-sm">No hay productos todavía</p>
               </div>
@@ -288,6 +302,7 @@ export default function AdminPanel() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-carbon-600">
+                      {/* ── FIX 3: .map() directo sin llaves de objeto ── */}
                       {['Producto', 'Precio', 'Stock', ''].map((h) => (
                         <th key={h} className="text-left px-4 py-3 font-mono text-xs text-carbon-400 uppercase tracking-widest">{h}</th>
                       ))}
@@ -320,16 +335,19 @@ export default function AdminPanel() {
         </div>
       )}
 
-      {/* ====─ TAB USUARIOS ====─ */}
+      {/* ==== TAB USUARIOS ==== */}
       {tab === 'usuarios' && (
         <div>
-          {loadingU ? <div className="flex justify-center py-16"><Spinner /></div> : usuarios.length === 0 ? (
+          {loadingU ? (
+            <div className="flex justify-center py-16"><Spinner /></div>
+          ) : usuarios.length === 0 ? (
             <div className="flex justify-center py-16"><p className="text-carbon-400 text-sm">No hay usuarios todavía</p></div>
           ) : (
             <div className="bg-carbon-800 border border-carbon-600 overflow-hidden">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-carbon-600">
+                    {/* ── FIX 3: mismo fix ── */}
                     {['Nombre', 'Email', 'Rol', 'Registro', ''].map((h) => (
                       <th key={h} className="text-left px-4 py-3 font-mono text-xs text-carbon-400 uppercase tracking-widest">{h}</th>
                     ))}
@@ -360,7 +378,7 @@ export default function AdminPanel() {
         </div>
       )}
 
-      {/* ====─ TAB RESERVAS ====─ */}
+      {/* ==== TAB RESERVAS ==== */}
       {tab === 'reservas' && (
         <div>
           <div className="flex justify-between items-center mb-5 flex-wrap gap-3">
@@ -372,13 +390,16 @@ export default function AdminPanel() {
             </button>
           </div>
 
-          {loadingR ? <div className="flex justify-center py-16"><Spinner /></div> : reservasAdmin.length === 0 ? (
+          {loadingR ? (
+            <div className="flex justify-center py-16"><Spinner /></div>
+          ) : reservasAdmin.length === 0 ? (
             <div className="flex justify-center py-16"><p className="text-carbon-400 text-sm">No hay reservas todavía</p></div>
           ) : (
             <div className="bg-carbon-800 border border-carbon-600 overflow-x-auto">
               <table className="w-full text-sm min-w-[700px]">
                 <thead>
                   <tr className="border-b border-carbon-600">
+                    {/* ── FIX 3: mismo fix ── */}
                     {['Usuario', 'Cancha', 'Fecha', 'Horario', 'Estado', 'Acciones'].map((h) => (
                       <th key={h} className="text-left px-4 py-3 font-mono text-xs text-carbon-400 uppercase tracking-widest">{h}</th>
                     ))}
@@ -387,6 +408,7 @@ export default function AdminPanel() {
                 <tbody className="divide-y divide-carbon-700">
                   {reservasAdmin.map((r) => {
                     const estadoPago = r.estadoPago || 'pendiente'
+                    // ── FIX 4: horas declarado antes de total ──
                     const horas = parseInt(r.horaFin) - parseInt(r.horaInicio)
                     const total = r.precio * horas
                     return (

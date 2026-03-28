@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { ArrowLeft, ArrowRight, Zap, Clock, Shield, Star, Users, Trophy } from 'lucide-react'
-// asdasd
+import { Link } from 'react-router'
+
 const SLIDES = [
   {
     id: 1,
@@ -9,9 +10,9 @@ const SLIDES = [
     desc: 'Césped sintético certificado FIFA con iluminación LED de alta intensidad para partidos nocturnos.',
     tag: 'Fútbol 5',
     stat: { num: '4.9', label: 'Rating promedio' },
-    badge: 'disponible',
+    
     icon: Star,
-    image: 'https://res.cloudinary.com/proyecto3/image/upload/v1774500595/Cartel_Cancha_de_Futbol_Llamativo_Amarillo_y_Verde_c911ul.png',
+    image: 'https://res.cloudinary.com/proyecto3/image/upload/v1774672263/WhatsApp_Image_2026-03-28_at_1.30.38_AM_fceqh2.jpg',
   },
   {
     id: 2,
@@ -20,9 +21,9 @@ const SLIDES = [
     desc: 'Instalaciones modernas con duchas calientes, casilleros individuales y zona de descanso.',
     tag: 'Instalaciones',
     stat: { num: '500+', label: 'Reservas / mes' },
-    badge: 'nuevo',
+    
     icon: Shield,
-    image: 'https://res.cloudinary.com/proyecto3/image/upload/v1774502076/Post_para_Instagram_promocion_cancha_de_futbol_minimalista_moderno_simple_ver_y_blanco_h1f3h9.png',
+    image: 'https://res.cloudinary.com/proyecto3/image/upload/v1774671067/Captura_de_pantalla_2026-03-28_011051_g3gtbi.png',
   },
   {
     id: 3,
@@ -31,9 +32,9 @@ const SLIDES = [
     desc: 'De 8 a 23 hs sin excepción. Reservá tu turno en segundos desde cualquier dispositivo.',
     tag: 'Fútbol 7',
     stat: { num: '15 hs', label: 'Disponibles / día' },
-    badge: 'disponible',
+    
     icon: Clock,
-    image: 'https://res.cloudinary.com/proyecto3/image/upload/v1774500555/cld-sample-3.jpg',
+    image: 'https://res.cloudinary.com/proyecto3/image/upload/v1774502076/Post_para_Instagram_promocion_cancha_de_futbol_minimalista_moderno_simple_ver_y_blanco_h1f3h9.png',
   },
   {
     id: 4,
@@ -42,7 +43,7 @@ const SLIDES = [
     desc: 'Torneos semanales, ligas amateur y eventos especiales para toda la familia.',
     tag: 'Fútbol 11',
     stat: { num: '98%', label: 'Satisfacción' },
-    badge: 'popular',
+    
     icon: Trophy,
     image: 'https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=900&q=80',
   },
@@ -151,11 +152,17 @@ function Carousel() {
 
           {/* CTA */}
           <div className="flex gap-3">
-            <button className="btn-primary flex items-center gap-2 text-xs">
-              Reservar ahora <ArrowRight size={13} />
+            <button className="btn-outline flex items-center gap-2 text-xs">
+               <Link
+              to="/reservas">
+              Reserva ahora
+            </Link>
             </button>
             <button className="btn-outline text-xs">
-              Ver más
+              <Link
+              to="/GaleriaPage">
+              Galeria de imagenes
+            </Link>
             </button>
           </div>
         </div>

@@ -136,7 +136,7 @@ function Home() {
                   <h3 className="font-display font-bold text-white text-sm uppercase tracking-wide">
                     {title}
                   </h3>
-                  <p className="text-carbon-400 text-xs mt-0.5">{desc}</p>
+                  <p className="text-green-400 text-xs mt-0.5">{desc}</p>
                 </div>
               </div>
             ))}
@@ -152,7 +152,7 @@ function Home() {
             <h2 className="section-title text-4xl md:text-5xl">
               Nuestras canchas
             </h2>
-            <p className="text-carbon-300 mt-3 text-sm max-w-xl">
+            <p className="text-green-300 mt-3 text-sm max-w-xl">
               Elegí tu cancha y reservá el horario que más te convenga.
             </p>
           </div>

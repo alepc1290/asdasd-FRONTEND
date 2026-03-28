@@ -10,101 +10,79 @@ const CATEGORIAS = ['Todas', 'Canchas', 'Instalaciones', 'Eventos', 'Nocturnas']
 const FOTOS = [
   {
     id: 1,
-    src: 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=1200&q=80',
-    thumb: 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=600&q=75',
+    src: 'https://res.cloudinary.com/proyecto3/image/upload/v1774668920/Captura_de_pantalla_2026-03-28_003424_wlohvq.png',
+    thumb: 'https://res.cloudinary.com/proyecto3/image/upload/v1774668920/Captura_de_pantalla_2026-03-28_003424_wlohvq.png',
     categoria: 'Canchas',
-    titulo: 'Cancha 1 — Fútbol 5',
-    desc: 'Césped sintético certificado FIFA. Capacidad para 10 jugadores.',
     featured: true,
   },
   {
     id: 2,
-    src: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80',
-    thumb: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=75',
+    src: 'https://res.cloudinary.com/proyecto3/image/upload/v1774668886/WhatsApp_Image_2026-03-28_at_12.12.13_AM_jpmvvs.jpg',
+    thumb: 'https://res.cloudinary.com/proyecto3/image/upload/v1774668886/WhatsApp_Image_2026-03-28_at_12.12.13_AM_jpmvvs.jpg',
     categoria: 'Canchas',
     titulo: 'Cancha 2 — Fútbol 5',
     desc: 'Iluminación LED de alta potencia. Disponible de noche.',
   },
   {
     id: 3,
-    src: 'https://images.unsplash.com/photo-1431324155629-1a6dae1434d5?w=1200&q=80',
-    thumb: 'https://images.unsplash.com/photo-1431324155629-1a6dae1434d5?w=600&q=75',
+    src: 'https://res.cloudinary.com/proyecto3/image/upload/v1774670517/WhatsApp_Image_2026-03-27_at_11.52.59_PM_1_shbdkt.jpg',
+    thumb: 'https://res.cloudinary.com/proyecto3/image/upload/v1774670517/WhatsApp_Image_2026-03-27_at_11.52.59_PM_1_shbdkt.jpg',
     categoria: 'Nocturnas',
-    titulo: 'Vista nocturna',
-    desc: 'Nuestras canchas operan hasta las 23 hs con iluminación total.',
   },
   {
     id: 4,
-    src: 'https://images.unsplash.com/photo-1575361204480-aadea25e6e68?w=1200&q=80',
-    thumb: 'https://images.unsplash.com/photo-1575361204480-aadea25e6e68?w=600&q=75',
+    src: 'https://res.cloudinary.com/proyecto3/image/upload/v1774669192/WhatsApp_Image_2026-03-27_at_11.52.59_PM_lonwtj.jpg',
+    thumb: 'https://res.cloudinary.com/proyecto3/image/upload/v1774669192/WhatsApp_Image_2026-03-27_at_11.52.59_PM_lonwtj.jpg',
     categoria: 'Canchas',
-    titulo: 'Cancha 3 — Fútbol 7',
-    desc: 'Dimensiones reglamentarias. Ideal para partidos con amigos.',
   },
   {
     id: 5,
-    src: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=1200&q=80',
-    thumb: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=600&q=75',
+    src: 'https://res.cloudinary.com/proyecto3/image/upload/v1774669431/WhatsApp_Image_2026-03-28_at_12.40.46_AM_tvfz3s.jpg',
+    thumb: 'https://res.cloudinary.com/proyecto3/image/upload/v1774669431/WhatsApp_Image_2026-03-28_at_12.40.46_AM_tvfz3s.jpg',
     categoria: 'Instalaciones',
-    titulo: 'Vestuarios',
-    desc: 'Vestuarios amplios con duchas calientes y casilleros individuales.',
   },
   {
     id: 6,
     src: 'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=1200&q=80',
     thumb: 'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?w=600&q=75',
     categoria: 'Eventos',
-    titulo: 'Torneo de verano 2024',
-    desc: 'Organizamos torneos mensuales para equipos amateurs y competitivos.',
     featured: true,
   },
   {
     id: 7,
-    src: 'https://images.unsplash.com/photo-1540747913346-19212a4b4fcc?w=1200&q=80',
-    thumb: 'https://images.unsplash.com/photo-1540747913346-19212a4b4fcc?w=600&q=75',
+    src: 'https://res.cloudinary.com/proyecto3/image/upload/v1774669602/WhatsApp_Image_2026-03-28_at_12.46.22_AM_ni6wyx.jpg',
+    thumb: 'https://res.cloudinary.com/proyecto3/image/upload/v1774669602/WhatsApp_Image_2026-03-28_at_12.46.22_AM_ni6wyx.jpg',
     categoria: 'Eventos',
-    titulo: 'Partido de gala',
-    desc: 'Eventos especiales con transmisión en vivo y premiación.',
   },
   {
     id: 8,
     src: 'https://images.unsplash.com/photo-1518604666860-9ed391f76460?w=1200&q=80',
     thumb: 'https://images.unsplash.com/photo-1518604666860-9ed391f76460?w=600&q=75',
     categoria: 'Nocturnas',
-    titulo: 'Cancha 4 de noche',
-    desc: 'El ambiente nocturno lleva el juego a otro nivel.',
   },
   {
     id: 9,
     src: 'https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=1200&q=80',
     thumb: 'https://images.unsplash.com/photo-1553778263-73a83bab9b0c?w=600&q=75',
     categoria: 'Instalaciones',
-    titulo: 'Zona de descanso',
-    desc: 'Espacio para relajarte antes o después del partido.',
   },
   {
     id: 10,
     src: 'https://images.unsplash.com/photo-1526232761682-d26e03ac148e?w=1200&q=80',
     thumb: 'https://images.unsplash.com/photo-1526232761682-d26e03ac148e?w=600&q=75',
     categoria: 'Canchas',
-    titulo: 'Cancha 4 — Fútbol 5',
-    desc: 'La más nueva del complejo. Gramado de última generación.',
   },
   {
     id: 11,
     src: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200&q=80',
     thumb: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=600&q=75',
     categoria: 'Eventos',
-    titulo: 'Copa Canchas5',
-    desc: 'Nuestro torneo anual más esperado. ¿Vas a participar este año?',
   },
   {
     id: 12,
     src: 'https://images.unsplash.com/photo-1487466365202-1afdb86c764e?w=1200&q=80',
     thumb: 'https://images.unsplash.com/photo-1487466365202-1afdb86c764e?w=600&q=75',
     categoria: 'Nocturnas',
-    titulo: 'Atmósfera nocturna',
-    desc: 'Las luces crean el ambiente ideal para los que juegan de noche.',
     featured: true,
   },
 ]
@@ -179,19 +157,6 @@ function Lightbox({ foto, onClose, onPrev, onNext, total, index }) {
         </button>
       </div>
 
-      {/* Bottom info */}
-      <div
-        className="px-6 py-4 border-t border-carbon-700 flex-shrink-0"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <p className="font-display font-700 text-white uppercase text-sm tracking-wide sm:hidden mb-1">
-          {foto.titulo}
-        </p>
-        <p className="text-carbon-400 text-sm">{foto.desc}</p>
-        <p className="font-mono text-carbon-600 text-xs mt-1 hidden sm:block">
-          ← → para navegar · ESC para cerrar
-        </p>
-      </div>
     </div>
   )
 }
@@ -219,24 +184,9 @@ function FotoCard({ foto, onOpen, index }) {
       {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-carbon-900/90 via-carbon-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-      {/* Zoom icon */}
-      <div className="absolute top-3 right-3 w-8 h-8 bg-carbon-900/80 border border-carbon-600 group-hover:border-verde-500 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 translate-y-1 group-hover:translate-y-0">
-        <ZoomIn size={14} className="text-verde-400" />
-      </div>
-
       {/* Category tag */}
       <div className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-all duration-200 -translate-y-1 group-hover:translate-y-0">
         <span className="tag text-[10px]">{foto.categoria}</span>
-      </div>
-
-      {/* Bottom info */}
-      <div className="absolute inset-x-0 bottom-0 p-4 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-        <h3 className="font-display font-700 text-white uppercase text-sm tracking-wide leading-tight">
-          {foto.titulo}
-        </h3>
-        {isFeatured && (
-          <p className="text-carbon-300 text-xs mt-1 line-clamp-2">{foto.desc}</p>
-        )}
       </div>
 
       {/* Bottom green line on hover */}
@@ -246,7 +196,7 @@ function FotoCard({ foto, onOpen, index }) {
 }
 
 /* ─── Page ──────────────────────────────────────────────── */
-export default function GaleriaPage() {
+ function GaleriaPage() {
   const [categoriaActiva, setCategoriaActiva] = useState('Todas')
   const [lightbox, setLightbox] = useState(null)
 
@@ -367,7 +317,7 @@ export default function GaleriaPage() {
       {/* ── CTA ───────────────────────────────────────────── */}
       <section className="bg-verde-600 py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <p className="font-mono text-verde-900/70 text-xs uppercase tracking-widest mb-3">
+          <p className="font-mono text-white-900/70 text-xs uppercase tracking-widest mb-3">
             ¿Te convenciste?
           </p>
           <h2 className="font-display font-900 text-carbon-900 text-5xl md:text-6xl uppercase leading-none mb-6">
@@ -396,3 +346,4 @@ export default function GaleriaPage() {
     </>
   )
 }
+export default GaleriaPage;

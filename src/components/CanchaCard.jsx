@@ -4,7 +4,7 @@ import { Users, ArrowRight } from 'lucide-react'
 
 const TIPO_LABEL = { futbol5: 'Fútbol 5', futbol7: 'Fútbol 7', futbol11: 'Fútbol 11' }
 
-export default function CanchaCard({ cancha, showReservar = true }) {
+function CanchaCard({ cancha, showReservar = true }) {
   const disponible = cancha.estado === 'disponible'
 
   return (
@@ -72,3 +72,4 @@ export default function CanchaCard({ cancha, showReservar = true }) {
     </article>
   )
 }
+export default CanchaCard
